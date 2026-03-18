@@ -1,0 +1,69 @@
+{
+  "name": "Ray's Repo",
+  "description": "Yoru's repo but almost everything is removed.",
+  "version": "1.0.0",
+  "scrapers": [
+    { 
+      "id": "showbox",
+      "name": "ShowBox",
+      "description": "ShowBox streaming with multiple quality options and versions",
+      "version": "1.0.0",
+      "author": "Nuvio Team",
+      "supportedTypes": [
+        "movie",
+        "tv"
+      ],
+      "filename": "providers/showbox.js",
+      "enabled": true,
+      "formats": [
+        "mp4",
+        "mkv"
+      ],
+      "logo": "https://raw.githubusercontent.com/tapframe/nuvio-providers/main/Assets/Logo-2.png",
+      "contentLanguage": [
+        "en"
+      ]
+    },
+    {
+      "id": "vidlink",
+      "name": "Vidlink",
+      "description": "Vidlink streaming with encrypted TMDB ID support for movies and TV shows",
+      "version": "1.0.0",
+      "author": "Nuvio Team",
+      "supportedTypes": [
+        "movie",
+        "tv"
+      ],
+      "filename": "providers/vidlink.js",
+      "enabled": true,
+      "formats": [
+        "m3u8",
+        "mp4"
+      ],
+      "logo": "https://vidlink.pro/favicon.ico",
+      "contentLanguage": [
+        "en"
+      ]
+    },
+    {
+      "id": "animekai",
+      "name": "AnimeKai",
+      "description": "AnimeKai TV episodes via AnimeKai servers",
+      "version": "1.1.0",
+      "author": "Nuvio Team",
+      "supportedTypes": [
+        "movie",
+        "tv"
+      ],
+      "filename": "providers/animekai.js",
+      "enabled": true,
+      "formats": [
+        "mp4"
+      ],
+      "logo": "https://animekai.to/assets/uploads/37585a39fe8c8d8fafaa2c7bfbf5374ecac859ea6a0288a6da2c61f5.png",
+      "contentLanguage": [
+        "en"
+      ]
+    }
+  ]
+}
