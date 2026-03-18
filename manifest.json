@@ -6,7 +6,7 @@
       "id": "showbox",
       "name": "ShowBox",
       "description": "ShowBox streaming with the best quality and up to 4K",
-      "version": "1.0.0",
+      "version": "3.2.7",
       "author": "Nuvio Team",
       "supportedTypes": [
         "movie",
