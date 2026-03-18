@@ -13,7 +13,7 @@
         "movie",
         "tv"
       ],
-      "filename": "providers/showbox.js",
+      "filename": "s.js",
       "enabled": true,
       "formats": [
         "mp4",
@@ -34,7 +34,7 @@
         "movie",
         "tv"
       ],
-      "filename": "providers/vidlink.js",
+      "filename": "v.js",
       "enabled": true,
       "formats": [
         "m3u8",
@@ -55,7 +55,7 @@
         "movie",
         "tv"
       ],
-      "filename": "providers/animekai.js",
+      "filename": "a.js",
       "enabled": true,
       "formats": [
         "mp4"
