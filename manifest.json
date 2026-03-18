@@ -1,6 +1,5 @@
 {
   "name": "Ray's Plugins",
-  "description": "Yoru's repo but only with plugins I want.",
   "version": "1.0.0",
   "scrapers": [
     { 
