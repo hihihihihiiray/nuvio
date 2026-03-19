@@ -5,7 +5,7 @@
     { 
       "id": "showbox",
       "name": "ShowBox",
-      "description": "ShowBox streaming with the best quality and up to 4K",
+      "description": "ShowBox streaming with multiple quality options and versions up to 4K",
       "version": "1.0",
       "author": "Nuvio Team",
       "supportedTypes": [
@@ -68,7 +68,7 @@
     {
       "id": "animekai",
       "name": "AnimeKai",
-      "description": "Best plugin for streaming anime with fast load times and up to 1080p",
+      "description": "AnimeKai streaming with fast load times, up to 1080p playback, and multi-server support",
       "version": "1.1",
       "author": "Nuvio Team",
       "supportedTypes": [
