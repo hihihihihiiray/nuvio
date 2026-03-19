@@ -183,9 +183,14 @@ function processShowBoxResponse(data, mediaInfo, mediaType, seasonNum, episodeNu
 
                     const normalizedQuality = getQualityFromName(link.quality || 'Unknown');
                     const linkSize = link.size || versionSize;
+                    const linkName = link.name || `${normalizedQuality}`;
 
-                    // Use stream name from API as-is
-                    const streamName = link.name || versionName;
+                    // Create stream name - use version number if multiple versions exist
+                    let streamName = 'ShowBox';
+                    if (data.versions.length > 1) {
+                        streamName += ` V${versionIndex + 1}`;
+                    }
+                    streamName += ` - ${normalizedQuality}`;
 
                     streams.push({
                         name: streamName,
