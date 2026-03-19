@@ -190,7 +190,7 @@ function processShowBoxResponse(data, mediaInfo, mediaType, seasonNum, episodeNu
                     if (data.versions.length > 1) {
                         streamName += ` V${versionIndex + 1}`;
                     }
-                    streamName += ` ${normalizedQuality}`;
+                    streamName += ` - ${normalizedQuality}`;
 
                     streams.push({
                         name: streamName,
