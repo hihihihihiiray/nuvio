@@ -2,7 +2,7 @@
 // React Native compatible version - Promise-based approach only
 
 // TMDB API Configuration
-const TMDB_API_KEY = '439c478a771f35c05022f9feabcca01c';
+const TMDB_API_KEY = '1c29a5198ee1854bd5eb45dbe8d17d92';
 const TMDB_BASE_URL = 'https://api.themoviedb.org/3';
 
 // ShowBox API Configuration
@@ -103,36 +103,6 @@ function formatFileSize(sizeStr) {
     return sizeStr;
 }
 
-// Known video file extensions
-const VIDEO_EXTENSIONS = ['.mkv', '.mp4', '.avi', '.mov', '.wmv', '.flv', '.webm', '.m4v', '.ts', '.m2ts'];
-
-// Extract a real media filename from a URL by scanning all path segments
-function getFilenameFromUrl(url) {
-    try {
-        // Strip query string and hash
-        const cleanUrl = url.split('?')[0].split('#')[0];
-        // Decode percent-encoded characters
-        const decoded = decodeURIComponent(cleanUrl);
-        // Split into path segments
-        const segments = decoded.split('/');
-        
-        // Scan segments from the end, looking for one with a video extension
-        for (let i = segments.length - 1; i >= 0; i--) {
-            const segment = segments[i];
-            if (!segment) continue;
-            const lower = segment.toLowerCase();
-            if (VIDEO_EXTENSIONS.some(ext => lower.endsWith(ext))) {
-                return segment; // Return the raw filename including extension
-            }
-        }
-        
-        // No video extension found — return null so we fall back to TMDB title
-        return null;
-    } catch (e) {
-        return null;
-    }
-}
-
 // Helper function to make HTTP requests
 function makeRequest(url, options = {}) {
     return fetch(url, {
@@ -195,10 +165,10 @@ function processShowBoxResponse(data, mediaInfo, mediaType, seasonNum, episodeNu
 
         console.log(`[ShowBox] Processing ${data.versions.length} version(s)`);
 
-        // Build fallback title from TMDB data in case URL has no filename
-        let fallbackTitle = mediaInfo.title || 'Unknown Title';
+        // Build title with episode info if TV
+        let streamTitle = mediaInfo.title || 'Unknown Title';
         if (mediaType === 'tv' && seasonNum && episodeNum) {
-            fallbackTitle = `${mediaInfo.title || 'Unknown'} S${String(seasonNum).padStart(2, '0')}E${String(episodeNum).padStart(2, '0')}`;
+            streamTitle = `${mediaInfo.title || 'Unknown'} S${String(seasonNum).padStart(2, '0')}E${String(episodeNum).padStart(2, '0')}`;
         }
 
         // Process each version
@@ -213,12 +183,7 @@ function processShowBoxResponse(data, mediaInfo, mediaType, seasonNum, episodeNu
 
                     const normalizedQuality = getQualityFromName(link.quality || 'Unknown');
                     const linkSize = link.size || versionSize;
-
-                    // Try to get a real filename from the URL, fall back to TMDB title
-                    const filenameFromUrl = getFilenameFromUrl(link.url);
-                    const streamTitle = filenameFromUrl || fallbackTitle;
-
-                    console.log(`[ShowBox] Stream title: "${streamTitle}" (${filenameFromUrl ? 'from URL' : 'from TMDB'})`);
+                    const linkName = link.name || `${normalizedQuality}`;
 
                     // Create stream name - use version number if multiple versions exist
                     let streamName = 'ShowBox';
