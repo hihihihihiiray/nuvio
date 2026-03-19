@@ -103,6 +103,18 @@ function formatFileSize(sizeStr) {
     return sizeStr;
 }
 
+// Extract filename from a URL (strips path and query string)
+function getFilenameFromUrl(url) {
+    try {
+        const pathname = url.split('?')[0]; // remove query string
+        const parts = pathname.split('/');
+        const filename = parts[parts.length - 1];
+        return decodeURIComponent(filename) || null;
+    } catch (e) {
+        return null;
+    }
+}
+
 // Helper function to make HTTP requests
 function makeRequest(url, options = {}) {
     return fetch(url, {
@@ -165,12 +177,6 @@ function processShowBoxResponse(data, mediaInfo, mediaType, seasonNum, episodeNu
 
         console.log(`[ShowBox] Processing ${data.versions.length} version(s)`);
 
-        // Build title with episode info if TV
-        let streamTitle = mediaInfo.title || 'Unknown Title';
-        if (mediaType === 'tv' && seasonNum && episodeNum) {
-            streamTitle = `${mediaInfo.title || 'Unknown'} S${String(seasonNum).padStart(2, '0')}E${String(episodeNum).padStart(2, '0')}`;
-        }
-
         // Process each version
         data.versions.forEach(function(version, versionIndex) {
             const versionName = version.name || `Version ${versionIndex + 1}`;
@@ -183,7 +189,9 @@ function processShowBoxResponse(data, mediaInfo, mediaType, seasonNum, episodeNu
 
                     const normalizedQuality = getQualityFromName(link.quality || 'Unknown');
                     const linkSize = link.size || versionSize;
-                    const linkName = link.name || `${normalizedQuality}`;
+
+                    // Use link name from API, fall back to version name, then filename from URL
+                    const streamTitle = link.name || versionName || getFilenameFromUrl(link.url) || 'Unknown Title';
 
                     // Create stream name - use version number if multiple versions exist
                     let streamName = 'ShowBox';
