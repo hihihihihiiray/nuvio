@@ -46,6 +46,26 @@
       ]
     },
     {
+      "id": "4khdhub",
+      "name": "4KHDHub",
+      "description": "Direct links up to 4K",
+      "version": "1.0.2",
+      "author": "Nuvio Team",
+      "supportedTypes": [
+        "movie",
+        "tv"
+      ],
+      "filename": "providers/4khdhub.js",
+      "enabled": true,
+      "formats": [
+        "mkv"
+      ],
+      "logo": "https://4khdhub.dad/apple-touch-icon.png",
+      "contentLanguage": [
+        "en"
+      ]
+    },
+    {
       "id": "animekai",
       "name": "AnimeKai",
       "description": "AnimeKai streaming with fast load times, up to 1080p playback, and multi-server support",
