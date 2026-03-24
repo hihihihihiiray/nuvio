@@ -7,11 +7,11 @@ const TMDB_BASE_URL = 'https://api.themoviedb.org/3';
 
 // ShowBox API Configuration
 const SHOWBOX_API_BASE = 'https://febapi.nuvioapp.space/api/media';
-const SHOWBOX_SERVER_REGION = 'USA5'; // Change this to swap regions (e.g. 'USA7', 'UK1')
+const OSS_REGION = 'USA7'; // Change this to swap regions (e.g. 'USA5', 'IN1')
 
 // Working headers for ShowBox API
 const WORKING_HEADERS = {
-    'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.3 Safari/605.1.15',
+    'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36',
     'Accept': 'application/json',
     'Accept-Language': 'en-GB,en-US;q=0.9,en;q=0.8',
     'Accept-Encoding': 'gzip, deflate, br, zstd',
@@ -34,9 +34,9 @@ function getUiToken() {
     return '';
 }
 
-
+// OSS region — set OSS_REGION above to change it
 function getOssGroup() {
-    return SHOWBOX_SERVER_REGION;
+    return OSS_REGION;
 }
 
 // Utility Functions
@@ -91,6 +91,43 @@ function formatFileSize(sizeStr) {
     }
     
     return sizeStr;
+}
+
+// Extract codec and technology details from a version name string
+function extractCodecDetails(text) {
+    if (!text || typeof text !== 'string') return [];
+    const details = new Set();
+    const lowerText = text.toLowerCase();
+
+    // Video Codecs & Technologies
+    if (lowerText.includes('dolby vision') || lowerText.includes('dovi') || lowerText.includes('.dv.')) details.add('DV');
+    if (lowerText.includes('hdr10+') || lowerText.includes('hdr10plus')) details.add('HDR10+');
+    else if (lowerText.includes('hdr')) details.add('HDR');
+    if (lowerText.includes('sdr')) details.add('SDR');
+
+    if (lowerText.includes('av1')) details.add('AV1');
+    else if (lowerText.includes('h265') || lowerText.includes('x265') || lowerText.includes('hevc')) details.add('H.265');
+    else if (lowerText.includes('h264') || lowerText.includes('x264') || lowerText.includes('avc')) details.add('H.264');
+
+    // Audio Codecs
+    if (lowerText.includes('atmos')) details.add('Atmos');
+    if (lowerText.includes('truehd') || lowerText.includes('true-hd')) details.add('TrueHD');
+    if (lowerText.includes('dts-hd ma') || lowerText.includes('dtshdma') || lowerText.includes('dts-hdhr')) details.add('DTS-HD MA');
+    else if (lowerText.includes('dts-hd')) details.add('DTS-HD');
+    else if (lowerText.includes('dts') && !lowerText.includes('dts-hd')) details.add('DTS');
+
+    if (lowerText.includes('eac3') || lowerText.includes('e-ac-3') || lowerText.includes('dd+') || lowerText.includes('ddplus')) details.add('EAC3');
+    else if (lowerText.includes('ac3') || (lowerText.includes('dd') && !lowerText.includes('dd+') && !lowerText.includes('ddp'))) details.add('AC3');
+
+    if (lowerText.includes('aac')) details.add('AAC');
+    if (lowerText.includes('opus')) details.add('Opus');
+    if (lowerText.includes('mp3')) details.add('MP3');
+
+    // Bit depth
+    if (lowerText.includes('10bit') || lowerText.includes('10-bit')) details.add('10-bit');
+    else if (lowerText.includes('8bit') || lowerText.includes('8-bit')) details.add('8-bit');
+
+    return Array.from(details);
 }
 
 // Helper function to make HTTP requests
@@ -174,6 +211,7 @@ function processShowBoxResponse(data, mediaInfo, mediaType, seasonNum, episodeNu
                     const normalizedQuality = getQualityFromName(link.quality || 'Unknown');
                     const linkSize = link.size || versionSize;
                     const linkName = link.name || `${normalizedQuality}`;
+                    const codecs = extractCodecDetails(versionName);
 
                     // Create stream name - use version number if multiple versions exist
                     let streamName = 'ShowBox';
@@ -181,6 +219,9 @@ function processShowBoxResponse(data, mediaInfo, mediaType, seasonNum, episodeNu
                         streamName += ` V${versionIndex + 1}`;
                     }
                     streamName += ` - ${normalizedQuality}`;
+                    if (codecs.length > 0) {
+                        streamName += ` | ${codecs.join(' ')}`;
+                    }
 
                     streams.push({
                         name: streamName,
