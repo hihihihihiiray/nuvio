@@ -191,10 +191,10 @@ function processShowBoxResponse(data, mediaInfo, mediaType, seasonNum, episodeNu
 
         console.log(`[ShowBox] Processing ${data.versions.length} version(s)`);
 
-        // Build title with episode info if TV
-        let streamTitle = mediaInfo.title || 'Unknown Title';
+        // Build base title with episode info if TV
+        let baseTitle = mediaInfo.title || 'Unknown Title';
         if (mediaType === 'tv' && seasonNum && episodeNum) {
-            streamTitle = `${mediaInfo.title || 'Unknown'} S${String(seasonNum).padStart(2, '0')}E${String(episodeNum).padStart(2, '0')}`;
+            baseTitle = `${mediaInfo.title || 'Unknown'} S${String(seasonNum).padStart(2, '0')}E${String(episodeNum).padStart(2, '0')}`;
         }
 
         // Process each version
@@ -214,17 +214,19 @@ function processShowBoxResponse(data, mediaInfo, mediaType, seasonNum, episodeNu
                     const normalizedQuality = getQualityFromName(link.quality || 'Unknown');
                     const linkSize = link.size || versionSize;
 
-                    // Create stream name - use version number if multiple versions exist
+                    // Stream name stays as just "ShowBox" (with optional version number)
                     let streamName = 'ShowBox';
                     if (data.versions.length > 1) {
                         streamName += ` V${versionIndex + 1}`;
                     }
                     streamName += ` - ${normalizedQuality}`;
 
-                    // Append codec line below the title if any codecs were found
+                    // Title line 1: "The Dark Knight 1080p" or "Show S01E01 1080p"
+                    // Title line 2 (if codecs found): "H.265 • Atmos • 10-bit"
+                    const titleWithQuality = `${baseTitle} ${normalizedQuality}`;
                     const fullTitle = codecLine
-                        ? `${streamTitle}\n${codecLine}`
-                        : streamTitle;
+                        ? `${titleWithQuality}\n${codecLine}`
+                        : titleWithQuality;
 
                     streams.push({
                         name: streamName,
