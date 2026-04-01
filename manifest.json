@@ -5,7 +5,7 @@
     { 
       "id": "showbox",
       "name": "ShowBox",
-      "description": "ShowBox streaming with multiple quality options and versions up to 4K",
+      "description": "ShowBox streaming with multiple quality options and versions",
       "version": "1.0",
       "author": "Nuvio Team",
       "supportedTypes": [
