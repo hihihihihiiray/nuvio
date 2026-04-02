@@ -407,7 +407,7 @@ function extractHubCloud(hubCloudUrl, baseMeta) {
     const titleText = $("title").text().trim();
     const currentMeta = __spreadProps(__spreadValues({}, baseMeta), {
       bytes: parseBytes(sizeText) || baseMeta.bytes,
-      title: titleText || baseMeta.title
+      title: ""
     });
     $("a").each((_, el) => {
       const text = $(el).text();
