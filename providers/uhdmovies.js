@@ -7,25 +7,8 @@
 var cheerio = require("cheerio-without-node-native");
 
 var DOMAIN = "https://uhdmovies.ink";
-var DOMAINS_URL = "https://raw.githubusercontent.com/phisher98/TVVVV/refs/heads/main/domains.json";
-var DOMAIN_CACHE = { url: DOMAIN, ts: 0 };
-
-function getLatestDomain() {
-  const now = Date.now();
-  if (now - DOMAIN_CACHE.ts < 36e5) return Promise.resolve(DOMAIN_CACHE.url);
-  return fetch(DOMAINS_URL)
-    .then(res => res.json())
-    .then(data => {
-      if (data && data["UHDMovies"]) {
-        DOMAIN_CACHE.url = data["UHDMovies"];
-        DOMAIN_CACHE.ts = now;
-      }
-      return DOMAIN_CACHE.url;
-    })
-    .catch(() => DOMAIN_CACHE.url);
-}
 var TMDB_API = "https://api.themoviedb.org/3";
-var TMDB_API_KEY = "1c29a5198ee1854bd5eb45dbe8d17d92";
+var TMDB_API_KEY = "1c29a5198ee1854bd5eb45dbe8d17d92"
 var USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36";
 
 // ============ UTILITY FUNCTIONS ============
@@ -95,24 +78,22 @@ function extractSize(text) {
 // ============ SEARCH FUNCTIONS ============
 
 function searchByTitle(title, year) {
-  return getLatestDomain().then(function(domain) {
-    var query = encodeURIComponent((title + " " + (year || "")).trim());
-    var searchUrl = domain + "/?s=" + query;
-    console.log("[UHDMovies] Search URL: " + searchUrl);
+  var query = encodeURIComponent((title + " " + (year || "")).trim());
+  var searchUrl = DOMAIN + "/?s=" + query;
+  console.log("[UHDMovies] Search URL: " + searchUrl);
 
-    return fetch(searchUrl, {
-      headers: { "User-Agent": USER_AGENT }
+  return fetch(searchUrl, {
+    headers: { "User-Agent": USER_AGENT }
+  })
+    .then(function (response) { return response.text(); })
+    .then(function (html) {
+      console.log("[UHDMovies] Response length: " + html.length + " bytes");
+      return parseSearchResults(html);
     })
-      .then(function (response) { return response.text(); })
-      .then(function (html) {
-        console.log("[UHDMovies] Response length: " + html.length + " bytes");
-        return parseSearchResults(html);
-      })
-      .catch(function (error) {
-        console.error("[UHDMovies] Search failed:", error.message);
-        return [];
-      });
-  });
+    .catch(function (error) {
+      console.error("[UHDMovies] Search failed:", error.message);
+      return [];
+    });
 }
 
 function parseSearchResults(html) {
