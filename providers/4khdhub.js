@@ -187,6 +187,95 @@ function formatBytes(val) {
   return parseFloat((val / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
 }
 
+// src/4khdhub/parsers.js — ported from 4khdhub.js
+function extractQuality(text) {
+  var t = (text || "").toUpperCase();
+  if (/\b(2160P|4K)\b/.test(t)) return "4K";
+  if (/\b1080P\b/.test(t)) return "1080p";
+  if (/\b720P\b/.test(t)) return "720p";
+  if (/\b480P\b/.test(t)) return "480p";
+  return "HD";
+}
+
+function extractCodec(text) {
+  var t = text || "";
+  if (/DV[\s.]?HDR[\s.]?H[\s.]?265/i.test(t)) return "DV HDR H265";
+  if (/HDR[\s.-]DV[\s.]?H[\s.]?265/i.test(t)) return "HDR DV H265";
+  if (/DV[\s.]?HDR/i.test(t)) return "DV HDR";
+  if (/HDR[\s.-]DV/i.test(t)) return "HDR DV";
+  if (/\bHDR\b/i.test(t)) return "HDR";
+  if (/H[\s.]?265|HEVC/i.test(t)) return "H.265";
+  if (/H[\s.]?264|x264/i.test(t)) return "H.264";
+  if (/\bAV1\b/i.test(t)) return "AV1";
+  return null;
+}
+
+function extractAudio(text) {
+  var t = text || "";
+  if (/DDP5\.1.*Atmos|Atmos.*DDP/i.test(t)) return "DDP5.1 Atmos";
+  if (/DDP5\.1/i.test(t)) return "DDP5.1";
+  if (/AAC5\.1/i.test(t)) return "AAC5.1";
+  if (/TrueHD.*Atmos|Atmos.*TrueHD/i.test(t)) return "TrueHD Atmos";
+  if (/\bTrueHD\b/i.test(t)) return "TrueHD";
+  if (/\bAtmos\b/i.test(t)) return "Atmos";
+  if (/\bDDP\b/i.test(t)) return "DDP";
+  if (/\bAAC\b/i.test(t)) return "AAC";
+  return null;
+}
+
+function extractLanguages(text) {
+  var t = text || "";
+  var langs = [];
+  var LANG_MAP = [
+    ["Hindi",      /\bHindi\b/i],
+    ["English",    /\bEnglish\b/i],
+    ["Tamil",      /\bTamil\b/i],
+    ["Telugu",     /\bTelugu\b/i],
+    ["Malayalam",  /\bMalayalam\b/i],
+    ["Kannada",    /\bKannada\b/i],
+    ["Bengali",    /\bBengali\b/i],
+    ["Punjabi",    /\bPunjabi\b/i],
+    ["Korean",     /\bKorean\b/i],
+    ["Japanese",   /\bJapanese\b/i],
+    ["Chinese",    /\bChinese\b/i],
+    ["Spanish",    /\bSpanish\b/i],
+    ["French",     /\bFrench\b/i],
+    ["German",     /\bGerman\b/i],
+    ["Arabic",     /\bArabic\b/i],
+    ["Russian",    /\bRussian\b/i],
+    ["Turkish",    /\bTurkish\b/i],
+    ["Portuguese", /\bPortuguese\b/i],
+  ];
+  LANG_MAP.forEach(function(pair) {
+    if (pair[1].test(t)) langs.push(pair[0]);
+  });
+  if (/\bMulti\b/i.test(t) && !langs.length) langs.push("Multi-Audio");
+  return langs;
+}
+
+function parseCardInfo(cheerioInstance, el) {
+  var $ = cheerioInstance;
+  var header     = $(el).find(".download-header").first();
+  var headerText = header.find(".flex-1").clone().children("code").remove().end().text().trim();
+  var fileTitle  = $(el).find(".file-title, .episode-file-title").text().trim();
+
+  var badgeText = "";
+  header.find("code .badge, code span").each(function(_, b) {
+    badgeText += " " + $(b).text().trim();
+  });
+
+  var corpus  = headerText + " " + fileTitle + " " + badgeText;
+  var codec   = extractCodec(fileTitle + " " + headerText);
+  var audio   = extractAudio(fileTitle);
+  var langs   = extractLanguages(badgeText + " " + headerText);
+
+  var srcMatch = corpus.match(/\b(WEB[\s-]?DL|WEBRip|BluRay|BRRip|HDCAM|NF|AMZN|DSNP)\b/i);
+  var SOURCE_LABELS = { 'bluray': 'BluRay', 'brrip': 'BRRip', 'webrip': 'WEBRip', 'web-dl': 'WEB-DL', 'webdl': 'WEB-DL', 'hdcam': 'HDCAM', 'nf': 'NF', 'amzn': 'AMZN', 'dsnp': 'DSNP' };
+  var source   = srcMatch ? (SOURCE_LABELS[srcMatch[1].toLowerCase().replace(/\s/g, '')] || srcMatch[1].toUpperCase()) : null;
+
+  return { codec, audio, languages: langs, source };
+}
+
 // src/4khdhub/search.js
 var cheerio = require("cheerio-without-node-native");
 function fetchPageUrl(name, year, isSeries) {
@@ -319,7 +408,7 @@ function extractHubCloud(hubCloudUrl, baseMeta) {
     const titleText = $("title").text().trim();
     const currentMeta = __spreadProps(__spreadValues({}, baseMeta), {
       bytes: parseBytes(sizeText) || baseMeta.bytes,
-      title: titleText || baseMeta.title
+      title: ""
     });
     $("a").each((_, el) => {
       const text = $(el).text();
@@ -388,17 +477,41 @@ function getStreams(tmdbId, type, season, episode) {
         const sourceResult = yield extractSourceResults($, item);
         if (sourceResult && sourceResult.url) {
           console.log(`[4KHDHub] Extracting from HubCloud: ${sourceResult.url}`);
+          const cardInfo = parseCardInfo($, item);
           const extractedLinks = yield extractHubCloud(sourceResult.url, sourceResult.meta);
-          return extractedLinks.map((link) => ({
-            name: `4KHDHub - ${link.source}${sourceResult.meta.height ? ` ${sourceResult.meta.height}p` : ""}`,
-            title: link.meta.title,
-            url: link.url,
-            quality: sourceResult.meta.height ? `${sourceResult.meta.height}p` : void 0,
-            size: formatBytes(link.meta.bytes || 0),
-            behaviorHints: {
-              bingeGroup: `4khdhub-${link.source}`
+          return extractedLinks.map((link) => {
+            // Line 1: title (+ year) (+ S01E03 for TV)
+            let titleLine = title + (year ? ` (${year})` : "");
+            if (isSeries && season && episode) {
+              titleLine += ` \u00B7 S${String(season).padStart(2, "0")}E${String(episode).padStart(2, "0")}`;
             }
-          }));
+            const lines = [titleLine];
+
+            // Line 2: source · codec
+            const techParts = [];
+            if (cardInfo.source) techParts.push(cardInfo.source);
+            if (cardInfo.codec)  techParts.push(cardInfo.codec);
+            if (techParts.length) lines.push("\uD83D\uDCFA " + techParts.join(" \u00B7 "));
+
+            // Line 3: languages
+            if (cardInfo.languages && cardInfo.languages.length) {
+              lines.push("\uD83D\uDD0A " + cardInfo.languages.join(" + "));
+            }
+
+            // Line 4: audio
+            if (cardInfo.audio) lines.push("\uD83C\uDFB5 " + cardInfo.audio);
+
+            return {
+              name: `4KHDHub - ${link.source}${sourceResult.meta.height ? ` ${sourceResult.meta.height}p` : ""}`,
+              title: lines.join("\n"),
+              url: link.url,
+              quality: sourceResult.meta.height ? `${sourceResult.meta.height}p` : void 0,
+              size: formatBytes(link.meta.bytes || 0),
+              behaviorHints: {
+                bingeGroup: `4khdhub-${link.source}`
+              }
+            };
+          });
         }
         return [];
       } catch (err) {
