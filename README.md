@@ -1,4 +1,4 @@
-# Nuvio Providers - made by Yoru (best ones compiled by me)
+# Nuvio Providers - made by Yoru
 
 A collection of high-quality local scrapers for the Nuvio streaming application. These scrapers allow you to fetch premium streams from various sources directly within the app.
 
