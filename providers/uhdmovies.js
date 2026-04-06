@@ -1,15 +1,10 @@
-/**
- * UHDMovies Provider - Ported from Kotlin CloudStream Extension
- * Based on: phisher98/cloudstream-extensions-phisher/UHDmoviesProvider
- */
-
 "use strict";
 
 // src/uhdmovies/index.js
-var DOMAIN = "https://uhdmovies.ink";
+var DOMAIN = "https://uhdmovies.rip";
 var TMDB_API = "https://api.themoviedb.org/3";
-var TMDB_API_KEY = "1c29a5198ee1854bd5eb45dbe8d17d92";
-var USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36";
+var TMDB_API_KEY = "1865f43a0549ca50d341dd9ab8b29f49";
+var USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36";
 function getBaseUrl(url) {
   if (!url) return DOMAIN;
   var match = url.match(/^(https?:\/\/[^\/]+)/);
