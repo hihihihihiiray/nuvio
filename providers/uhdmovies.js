@@ -1,10 +1,15 @@
+/**
+ * UHDMovies Provider - Ported from Kotlin CloudStream Extension
+ * Based on: phisher98/cloudstream-extensions-phisher/UHDmoviesProvider
+ */
+
 "use strict";
 
 // src/uhdmovies/index.js
-var DOMAIN = "https://uhdmovies.rip";
+var DOMAIN = "https://uhdmovies.ink";
 var TMDB_API = "https://api.themoviedb.org/3";
-var TMDB_API_KEY = "1865f43a0549ca50d341dd9ab8b29f49";
-var USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36";
+var TMDB_API_KEY = "1c29a5198ee1854bd5eb45dbe8d17d92";
+var USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36";
 function getBaseUrl(url) {
   if (!url) return DOMAIN;
   var match = url.match(/^(https?:\/\/[^\/]+)/);
@@ -420,6 +425,7 @@ function extractDriveseedPage(url) {
     var quality = buildQualityLabel(qualityText);
     var labelExtras = "";
     if (fileName) labelExtras += "[" + fileName + "]";
+    if (size) labelExtras += "[" + size + "]";
     var textCenterLinks = extractTextCenterLinks(html);
     var promises = [];
     textCenterLinks.forEach(function(item) {
@@ -429,31 +435,31 @@ function extractDriveseedPage(url) {
       if (text.indexOf("instant download") !== -1) {
         promises.push(
           extractInstantLink(href).then(function(link) {
-            if (link) streams.push({ name: "UHDMovies", title: "Driveseed Instant " + labelExtras, url: link, quality, size: size || null });
+            if (link) streams.push({ name: "UHDMovies", title: "Driveseed Instant " + labelExtras, url: link, quality, size: size });
           })
         );
       } else if (text.indexOf("resume worker bot") !== -1) {
         promises.push(
           extractResumeBot(href).then(function(link) {
-            if (link) streams.push({ name: "UHDMovies", title: "Driveseed ResumeBot " + labelExtras, url: link, quality, size: size || null });
+            if (link) streams.push({ name: "UHDMovies", title: "Driveseed ResumeBot " + labelExtras, url: link, quality, size: size });
           })
         );
       } else if (text.indexOf("direct links") !== -1) {
         promises.push(
           extractCFType1(baseDomain + href).then(function(links) {
             links.forEach(function(link) {
-              streams.push({ name: "UHDMovies", title: "Driveseed Direct " + labelExtras, url: link, quality, size: size || null });
+              streams.push({ name: "UHDMovies", title: "Driveseed Direct " + labelExtras, url: link, quality, size: size });
             });
           })
         );
       } else if (text.indexOf("resume cloud") !== -1) {
         promises.push(
           extractResumeCloudLink(baseDomain, href).then(function(link) {
-            if (link) streams.push({ name: "UHDMovies", title: "Driveseed ResumeCloud " + labelExtras, url: link, quality, size: size || null });
+            if (link) streams.push({ name: "UHDMovies", title: "Driveseed ResumeCloud " + labelExtras, url: link, quality, size: size });
           })
         );
       } else if (text.indexOf("cloud download") !== -1) {
-        streams.push({ name: "UHDMovies", title: "Driveseed Cloud " + labelExtras, url: href, quality, size: size || null });
+        streams.push({ name: "UHDMovies", title: "Driveseed Cloud " + labelExtras, url: href, quality, size: size });
       }
     });
     return Promise.all(promises).then(function() {
@@ -564,7 +570,7 @@ function getStreams(tmdbId, mediaType, season, episode) {
             if (finalLink.indexOf("video-seed") !== -1) {
               return extractVideoSeed(finalLink).then(function(url) {
                 if (!url) return [];
-                return [{ name: "UHDMovies", title: "UHDMovies " + (linkData.quality || "Unknown"), url, quality: linkData.quality || "Unknown", size: linkData.size || null }];
+                return [{ name: "UHDMovies", title: "UHDMovies " + (linkData.quality || "Unknown"), url, quality: linkData.quality || "Unknown", size: linkData.size }];
               });
             }
             return [{
@@ -572,7 +578,7 @@ function getStreams(tmdbId, mediaType, season, episode) {
               title: "UHDMovies " + (linkData.sourceName || linkData.quality || ""),
               url: finalLink,
               quality: linkData.quality || "Unknown",
-              size: linkData.size || null
+              size: linkData.size
             }];
           });
         });
