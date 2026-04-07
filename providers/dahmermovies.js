@@ -1,235 +1,428 @@
-/**
- * Single-file Movie/Series Scraper and Streaming Extractor
- * Target: https://a.111477.xyz
- * 
- * Features:
- * - Search for movies and series across multiple categories
- * - Extract direct playable streaming links (MP4, MKV)
- * - Handle both movies and series (seasons/episodes)
- * - Built-in rate-limiting handling (429 errors)
- * - Modular design in a single file
- */
+// Dahmer Movies Scraper for Nuvio Local Scrapers
+// React Native compatible version
 
-const axios = require('axios');
-const cheerio = require('cheerio');
+console.log('[DahmerMovies] Initializing Dahmer Movies scraper');
 
-const BASE_URL = 'https://a.111477.xyz';
+// Constants
+const TMDB_API_KEY = "439c478a771f35c05022f9feabcca01c";
+const DAHMER_MOVIES_API = 'https://a.111477.xyz';
+const TIMEOUT = 60000; // 60 seconds
 
-// Axios instance with custom headers to mimic a real browser
-const client = axios.create({
-    timeout: 20000,
-    headers: {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8',
-        'Accept-Language': 'en-US,en;q=0.9',
+// Quality mapping
+const Qualities = {
+    Unknown: 0,
+    P144: 144,
+    P240: 240,
+    P360: 360,
+    P480: 480,
+    P720: 720,
+    P1080: 1080,
+    P1440: 1440,
+    P2160: 2160
+};
+
+// Helper function to make HTTP requests
+function makeRequest(url, options = {}) {
+    const requestOptions = {
+        timeout: TIMEOUT,
+        headers: {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
+            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+            'Accept-Language': 'en-US,en;q=0.5',
+            'Connection': 'keep-alive',
+            ...options.headers
+        },
+        ...options
+    };
+
+    return fetch(url, requestOptions).then(function (response) {
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        }
+        return response;
+    });
+}
+
+// Utility functions
+function getEpisodeSlug(season = null, episode = null) {
+    if (season === null && episode === null) {
+        return ['', ''];
     }
-});
-
-/**
- * Utility: Sleep for a given amount of time
- * Used to avoid triggering rate limits (HTTP 429)
- */
-const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
-
-/**
- * Utility: Clean and format title for comparison
- */
-function cleanTitle(title) {
-    return title.toLowerCase().replace(/[^\w\s]/gi, '').trim();
+    const seasonSlug = season < 10 ? `0${season}` : `${season}`;
+    const episodeSlug = episode < 10 ? `0${episode}` : `${episode}`;
+    return [seasonSlug, episodeSlug];
 }
 
-/**
- * Utility: Calculate title similarity
- * Currently uses a simple inclusion check for speed and reliability on this specific site
- */
-function similarity(query, target) {
-    const q = cleanTitle(query);
-    const t = cleanTitle(target);
-    if (t.includes(q) || q.includes(t)) return 1.0;
-    return 0;
+function getIndexQuality(str) {
+    if (!str) return Qualities.Unknown;
+    const match = str.match(/(\d{3,4})[pP]/);
+    return match ? parseInt(match[1]) : Qualities.Unknown;
 }
 
-/**
- * Core: Scrape a directory listing from the target site
- * Handles parsing the table-based index and manages retries on rate limits
- */
-async function getDirectoryListing(url, retry = true) {
+// Extract quality with codec information
+function getQualityWithCodecs(str) {
+    if (!str) return 'Unknown';
+
+    // Extract base quality (resolution)
+    const qualityMatch = str.match(/(\d{3,4})[pP]/);
+    const baseQuality = qualityMatch ? `${qualityMatch[1]}p` : 'Unknown';
+
+    // Extract codec information (excluding HEVC and bit depth)
+    const codecs = [];
+    const lowerStr = str.toLowerCase();
+
+    // HDR formats
+    if (lowerStr.includes('dv') || lowerStr.includes('dolby vision')) codecs.push('DV');
+    if (lowerStr.includes('hdr10+')) codecs.push('HDR10+');
+    else if (lowerStr.includes('hdr10') || lowerStr.includes('hdr')) codecs.push('HDR');
+
+    // Special formats
+    if (lowerStr.includes('remux')) codecs.push('REMUX');
+    if (lowerStr.includes('imax')) codecs.push('IMAX');
+
+    // Combine quality with codecs using pipeline separator
+    if (codecs.length > 0) {
+        return `${baseQuality} | ${codecs.join(' | ')}`;
+    }
+
+    return baseQuality;
+}
+
+function getIndexQualityTags(str, fullTag = false) {
+    if (!str) return '';
+
+    if (fullTag) {
+        const match = str.match(/(.*)\.(?:mkv|mp4|avi)/i);
+        return match ? match[1].trim() : str;
+    } else {
+        const match = str.match(/\d{3,4}[pP]\.?(.*?)\.(mkv|mp4|avi)/i);
+        return match ? match[1].replace(/\./g, ' ').trim() : str;
+    }
+}
+
+function encodeUrl(url) {
     try {
-        // Essential delay to prevent 429 errors from the server
-        await sleep(2500); 
-        
-        const response = await client.get(url);
-        const $ = cheerio.load(response.data);
-        const items = [];
+        return encodeURI(url);
+    } catch (e) {
+        return url;
+    }
+}
 
-        // The site uses a standard Apache-style index table
-        $('table tr').each((i, el) => {
-            const nameCell = $(el).find('td').eq(1);
-            const link = nameCell.find('a').attr('href');
-            const name = nameCell.find('a').text().trim();
-            
-            // Skip navigation links and empty entries
-            if (link && name && !name.includes('Parent Directory') && name !== '../') {
-                const isDir = link.endsWith('/');
-                items.push({
-                    name,
-                    url: link.startsWith('http') ? link : new URL(link, url).toString(),
-                    type: isDir ? 'directory' : 'file'
-                });
+function decode(input) {
+    try {
+        return decodeURIComponent(input);
+    } catch (e) {
+        return input;
+    }
+}
+
+// Function to resolve redirects and get the final direct URL
+function resolveFinalUrl(startUrl) {
+    const maxRedirects = 5;
+    const referer = 'https://a.111477.xyz/';
+    const userAgent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36';
+
+    function attemptResolve(url, count, retryCount = 0) {
+        if (count >= maxRedirects) {
+            return Promise.resolve(url.includes('111477.xyz') ? null : url);
+        }
+
+        return fetch(url, {
+            method: 'HEAD',
+            redirect: 'manual',
+            headers: {
+                'User-Agent': userAgent,
+                'Referer': referer
             }
-        });
+        }).then(function (response) {
+            // Handle rate limiting
+            if (response.status === 429 && retryCount < 3) {
+                const waitTime = (retryCount + 1) * 3000;
+                return new Promise(resolve => setTimeout(resolve, waitTime))
+                    .then(() => attemptResolve(url, count, retryCount + 1));
+            }
 
-        return items;
-    } catch (error) {
-        if (retry && error.response && error.response.status === 429) {
-            console.warn(`Rate limited on ${url}, waiting 5s before retry...`);
-            await sleep(5000);
-            return getDirectoryListing(url, false);
+            if (response.status >= 300 && response.status < 400) {
+                const location = response.headers.get('location');
+                if (location) {
+                    const nextUrl = location.startsWith('http') 
+                        ? location 
+                        : new URL(location, url).href;
+                    return attemptResolve(nextUrl, count + 1);
+                }
+            }
+            
+            // If we are at a 200 OK but still on the redirector domain, it's a failure
+            if (url.includes('111477.xyz')) {
+                return null;
+            }
+
+            return url;
+        }).catch(function (error) {
+            return null;
+        });
+    }
+
+    return attemptResolve(startUrl, 0);
+}
+
+// Format file size from bytes to human readable format
+function formatFileSize(sizeText) {
+    if (!sizeText) return null;
+
+    // If it's already formatted (contains GB, MB, etc.), return as is
+    if (/\d+(\.\d+)?\s*(GB|MB|KB|TB)/i.test(sizeText)) {
+        return sizeText;
+    }
+
+    // If it's a number (bytes), convert to human readable
+    const bytes = parseInt(sizeText);
+    if (isNaN(bytes)) return sizeText;
+
+    const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+    if (bytes === 0) return '0 Bytes';
+
+    const i = Math.floor(Math.log(bytes) / Math.log(1024));
+    const size = (bytes / Math.pow(1024, i)).toFixed(2);
+
+    return `${size} ${sizes[i]}`;
+}
+
+// Parse HTML using basic string manipulation (React Native compatible)
+function parseLinks(html) {
+    const links = [];
+
+    // Parse table rows to get both links and file sizes
+    const rowRegex = /<tr[^>]*>(.*?)<\/tr>/gis;
+    let rowMatch;
+
+    while ((rowMatch = rowRegex.exec(html)) !== null) {
+        const rowContent = rowMatch[1];
+
+        // Extract link from the row
+        const linkMatch = rowContent.match(/<a[^>]*href=["']([^"']*)["'][^>]*>([^<]*)<\/a>/i);
+        if (!linkMatch) continue;
+
+        const href = linkMatch[1];
+        const text = linkMatch[2].trim();
+
+        // Skip parent directory and empty links
+        if (!text || href === '../' || text === '../') continue;
+
+        // Extract file size from the same row - try multiple patterns
+        let size = null;
+
+        // Pattern 1: DahmerMovies specific - data-sort attribute with byte size
+        const sizeMatch1 = rowContent.match(/<td[^>]*data-sort=["']?(\d+)["']?[^>]*>/i);
+        if (sizeMatch1) {
+            size = sizeMatch1[1]; // Use the data-sort value (bytes)
+        }
+
+        // Pattern 2: Standard Apache directory listing with filesize class
+        if (!size) {
+            const sizeMatch2 = rowContent.match(/<td[^>]*class=["']filesize["'][^>]*[^>]*>([^<]+)<\/td>/i);
+            if (sizeMatch2) {
+                size = sizeMatch2[1].trim();
+            }
+        }
+
+        // Pattern 3: Look for size in any td element after the link (formatted sizes)
+        if (!size) {
+            const sizeMatch3 = rowContent.match(/<\/a><\/td>\s*<td[^>]*>([^<]+(?:GB|MB|KB|B|\d+\s*(?:GB|MB|KB|B)))<\/td>/i);
+            if (sizeMatch3) {
+                size = sizeMatch3[1].trim();
+            }
+        }
+
+        // Pattern 4: Look for size anywhere in the row (more permissive)
+        if (!size) {
+            const sizeMatch4 = rowContent.match(/(\d+(?:\.\d+)?\s*(?:GB|MB|KB|B|bytes?))/i);
+            if (sizeMatch4) {
+                size = sizeMatch4[1].trim();
+            }
+        }
+
+        links.push({ text, href, size });
+    }
+
+    // Fallback to simple link parsing if table parsing fails
+    if (links.length === 0) {
+        const linkRegex = /<a[^>]*href=["']([^"']*)["'][^>]*>([^<]*)<\/a>/gi;
+        let match;
+
+        while ((match = linkRegex.exec(html)) !== null) {
+            const href = match[1];
+            const text = match[2].trim();
+            if (text && href && href !== '../' && text !== '../') {
+                links.push({ text, href, size: null });
+            }
+        }
+    }
+
+    return links;
+}
+
+// Main Dahmer Movies fetcher function
+function invokeDahmerMovies(title, year, season = null, episode = null) {
+    console.log(`[DahmerMovies] Searching for: ${title} (${year})${season ? ` Season ${season}` : ''}${episode ? ` Episode ${episode}` : ''}`);
+
+    // Construct URL based on content type (with proper encoding)
+    const encodedUrl = season === null
+        ? `${DAHMER_MOVIES_API}/movies/${encodeURIComponent(title.replace(/:/g, '') + ' (' + year + ')')}/`
+        : `${DAHMER_MOVIES_API}/tvs/${encodeURIComponent(title.replace(/:/g, ' -'))}/${encodeURIComponent('Season ' + season)}/`;
+
+    console.log(`[DahmerMovies] Fetching from: ${encodedUrl}`);
+
+    return makeRequest(encodedUrl).then(function (response) {
+        return response.text();
+    }).then(function (html) {
+        console.log(`[DahmerMovies] Response length: ${html.length}`);
+
+        // Parse HTML to extract links
+        const paths = parseLinks(html);
+        console.log(`[DahmerMovies] Found ${paths.length} total links`);
+
+        // Filter based on content type
+        let filteredPaths;
+        if (season === null) {
+            // For movies, filter by quality (1080p or 2160p)
+            filteredPaths = paths.filter(path =>
+                /(1080p|2160p)/i.test(path.text)
+            );
+            console.log(`[DahmerMovies] Filtered to ${filteredPaths.length} movie links (1080p/2160p only)`);
+        } else {
+            // For TV shows, filter by season and episode
+            const [seasonSlug, episodeSlug] = getEpisodeSlug(season, episode);
+            const episodePattern = new RegExp(`S${seasonSlug}E${episodeSlug}`, 'i');
+            filteredPaths = paths.filter(path =>
+                episodePattern.test(path.text)
+            );
+            console.log(`[DahmerMovies] Filtered to ${filteredPaths.length} TV episode links (S${seasonSlug}E${episodeSlug})`);
+        }
+
+        if (filteredPaths.length === 0) {
+            console.log('[DahmerMovies] No matching content found');
+            return [];
+        }
+
+        // Function to sleep/delay
+        const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
+
+        // Process results sequentially to avoid 429 rate limiting
+        const results = [];
+        const maxLinks = 10; // Increased to 10 links
+        const pathsToProcess = filteredPaths.slice(0, maxLinks);
+        
+        async function processPaths() {
+            for (const path of pathsToProcess) {
+                const quality = getIndexQuality(path.text);
+                const qualityWithCodecs = getQualityWithCodecs(path.text);
+                const tags = getIndexQualityTags(path.text);
+
+                // Construct proper URL
+                let fullUrl;
+                if (path.href.startsWith('http')) {
+                    try {
+                        const url = new URL(path.href);
+                        fullUrl = `${url.protocol}//${url.host}${url.pathname}`;
+                    } catch (error) {
+                        fullUrl = path.href.replace(/ /g, '%20');
+                    }
+                } else if (path.href.startsWith('/')) {
+                    const urlObj = new URL(DAHMER_MOVIES_API);
+                    const encodedPath = path.href.split('/').map(p => encodeURIComponent(decode(p))).join('/');
+                    fullUrl = `${urlObj.protocol}//${urlObj.host}${encodedPath}`;
+                } else {
+                    const baseUrl = encodedUrl.endsWith('/') ? encodedUrl : encodedUrl + '/';
+                    const encodedPath = path.href.split('/').map(p => encodeURIComponent(decode(p))).join('/');
+                    fullUrl = baseUrl + encodedPath;
+                }
+
+                try {
+                    const finalUrl = await resolveFinalUrl(fullUrl);
+                    if (finalUrl) {
+                        results.push({
+                            name: "DahmerMovies",
+                            title: path.text,
+                            url: finalUrl,
+                            quality: qualityWithCodecs,
+                            size: formatFileSize(path.size),
+                            type: "direct",
+                            headers: {
+                                'User-Agent': 'Mozilla/5.0 (Android) ExoPlayer',
+                                'Referer': DAHMER_MOVIES_API + '/'
+                            },
+                            provider: "dahmermovies",
+                            filename: path.text
+                        });
+                    }
+                    
+                    // 1.5 second delay to balance speed and safety
+                    await sleep(1500);
+                } catch (e) {
+                    console.log(`[DahmerMovies] Failed to resolve ${fullUrl}`);
+                }
+            }
+            
+            // Sort by quality (highest first)
+            results.sort((a, b) => {
+                const qualityA = getIndexQuality(a.filename);
+                const qualityB = getIndexQuality(b.filename);
+                return qualityB - qualityA;
+            });
+
+            console.log(`[DahmerMovies] Successfully processed ${results.length} streams`);
+            return results;
+        }
+
+        return processPaths();
+
+    }).catch(function (error) {
+        if (error.name === 'AbortError') {
+            console.log('[DahmerMovies] Request timeout - server took too long to respond');
+        } else {
+            console.log(`[DahmerMovies] Error: ${error.message}`);
         }
         return [];
-    }
+    });
 }
 
-/**
- * Feature A: Search Function
- * Scrapes main categories and finds the best matching movie or series
- * @param {string} query - The movie or series title to search for
- * @returns {Promise<Object|null>} - Found content metadata or null
- */
-async function search(query) {
-    const categories = [
-        { name: 'movies', url: `${BASE_URL}/movies/` },
-        { name: 'series', url: `${BASE_URL}/tvs/` },
-        { name: 'kdrama', url: `${BASE_URL}/kdrama/` },
-        { name: 'asiandrama', url: `${BASE_URL}/asiandrama/` }
-    ];
+// Main function to get streams for TMDB content
+function getStreams(tmdbId, mediaType = 'movie', seasonNum = null, episodeNum = null) {
+    console.log(`[DahmerMovies] Fetching streams for TMDB ID: ${tmdbId}, Type: ${mediaType}${seasonNum ? `, S${seasonNum}E${episodeNum}` : ''}`);
 
-    let bestMatch = null;
+    // Get TMDB info
+    const tmdbUrl = `https://api.themoviedb.org/3/${mediaType === 'tv' ? 'tv' : 'movie'}/${tmdbId}?api_key=${TMDB_API_KEY}`;
+    return makeRequest(tmdbUrl).then(function (tmdbResponse) {
+        return tmdbResponse.json();
+    }).then(function (tmdbData) {
+        const title = mediaType === 'tv' ? tmdbData.name : tmdbData.title;
+        const year = mediaType === 'tv' ? tmdbData.first_air_date?.substring(0, 4) : tmdbData.release_date?.substring(0, 4);
 
-    // Search sequentially to respect server limits
-    for (const cat of categories) {
-        const items = await getDirectoryListing(cat.url);
-        for (const item of items) {
-            if (similarity(query, item.name) > 0.8) {
-                bestMatch = {
-                    ...item,
-                    category: cat.name
-                };
-                break;
-            }
-        }
-        if (bestMatch) break;
-    }
-
-    if (!bestMatch) return null;
-
-    return {
-        title: bestMatch.name.replace(/\/$/, ''),
-        type: bestMatch.category === 'movies' ? 'movie' : 'series',
-        contentId: bestMatch.url
-    };
-}
-
-/**
- * Utility: Extract quality and audio info from filename
- */
-function parseFileInfo(file) {
-    const name = file.name;
-    let quality = 'Unknown';
-    if (name.includes('2160p') || name.includes('4K')) quality = '2160p';
-    else if (name.includes('1080p')) quality = '1080p';
-    else if (name.includes('720p')) quality = '720p';
-    else if (name.includes('480p')) quality = '480p';
-
-    let audio = 'English'; // Default for this source
-    if (name.toLowerCase().includes('hindi')) audio = 'Hindi';
-    
-    return {
-        quality,
-        url: file.url,
-        audio,
-        name: name
-    };
-}
-
-/**
- * Feature B & C: Stream Extraction and Processing
- * Navigates content directories to find direct playable links
- * @param {string} contentId - The URL of the content directory
- * @returns {Promise<Object|null>} - Structured JSON with stream links
- */
-async function getStreams(contentId) {
-    const items = await getDirectoryListing(contentId);
-    if (!items.length) return null;
-
-    // Identify if it's a series (has season folders) or a movie (has video files)
-    const seasonDirs = items.filter(i => i.type === 'directory' && 
-        (i.name.toLowerCase().includes('season') || i.name.toLowerCase().includes('specials')));
-    
-    const videoFiles = items.filter(i => i.type === 'file' && 
-        /\.(mkv|mp4|avi|m4v)$/i.test(i.name));
-
-    const result = {
-        title: decodeURIComponent(contentId.split('/').filter(Boolean).pop()),
-        type: seasonDirs.length > 0 ? 'series' : 'movie',
-        streams: []
-    };
-
-    if (result.type === 'movie') {
-        // Process movie files directly
-        result.streams = videoFiles.map(parseFileInfo);
-    } else {
-        // Process series: Iterate through each season folder
-        const seasonData = [];
-        for (const season of seasonDirs) {
-            const episodes = await getDirectoryListing(season.url);
-            const videoEpisodes = episodes.filter(e => e.type === 'file' && 
-                /\.(mkv|mp4|avi|m4v)$/i.test(e.name));
-            
-            const mapped = videoEpisodes.map(ep => ({
-                season: season.name.replace(/\/$/, ''),
-                ...parseFileInfo(ep)
-            }));
-            seasonData.push(...mapped);
-        }
-        result.streams = seasonData;
-    }
-
-    return result;
-}
-
-/**
- * CLI Entry Point
- * Allows running the script from terminal: node scraper.js "Movie Name"
- */
-async function main() {
-    const args = process.argv.slice(2);
-    if (args.length === 0) {
-        console.log('Usage: node scraper.js "Title"');
-        process.exit(0);
-    }
-
-    const query = args.join(' ');
-
-    try {
-        const searchResult = await search(query);
-
-        if (!searchResult) {
-            console.log(JSON.stringify(null));
-            return;
+        if (!title) {
+            throw new Error('Could not extract title from TMDB response');
         }
 
-        const finalData = await getStreams(searchResult.contentId);
-        console.log(JSON.stringify(finalData, null, 2));
-    } catch (err) {
-        console.error('An error occurred:', err.message);
-        process.exit(1);
-    }
+        console.log(`[DahmerMovies] TMDB Info: "${title}" (${year})`);
+
+        // Call the main scraper function
+        return invokeDahmerMovies(
+            title,
+            year ? parseInt(year) : null,
+            seasonNum,
+            episodeNum
+        );
+
+    }).catch(function (error) {
+        console.error(`[DahmerMovies] Error in getStreams: ${error.message}`);
+        return [];
+    });
 }
 
-// Export for module usage and handle CLI execution
-if (require.main === module) {
-    main();
+// Export the main function
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = { getStreams };
+} else {
+    // For React Native environment
+    global.getStreams = getStreams;
 }
-
-module.exports = { search, getStreams };
