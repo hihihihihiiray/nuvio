@@ -6,7 +6,7 @@ console.log('[DahmerMovies] Initializing Dahmer Movies scraper');
 // Constants
 const TMDB_API_KEY = "439c478a771f35c05022f9feabcca01c";
 const DAHMER_MOVIES_API = 'https://a.111477.xyz';
-const TIMEOUT = 60000; // 60 seconds
+const TIMEOUT = 20000; // 20 seconds
 
 const BATCH_SIZE = 3;          // links resolved in parallel per batch
 const BATCH_GAP_MS = 400;      // gap between batches (only paid when a 429 occurred)
