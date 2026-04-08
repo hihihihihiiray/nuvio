@@ -1,4 +1,4 @@
-# Best Nuvio Providers made by Yoru
+# Best Nuvio Plugins
 
 A collection of high-quality local scrapers created by Yoru & D3adlyRocket compiled (by me) for the Nuvio streaming application. These scrapers allow you to fetch premium and fast streams from various sources directly within the app.
 
