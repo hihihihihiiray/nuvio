@@ -26,7 +26,7 @@ A curated collection of the best high-quality scrapers compiled for the Nuvio st
 ## Available Plugins
 | Provider | Language | Content | Quality | NuvioApp | NuvioTV |
 |---|---|---|---|---|---|
-| [![showbox.png](https://files.catbox.moe/4mdxz9.jpeg)](https://postimg.cc/67kNR2P9) ShowBox | 🏴󠁧󠁢󠁥󠁮󠁧󠁿 | Shows & Movies | 4K / 1080p / 720p | ✅ | ❌ |
+| [![showbox.png]([g](https://i.postimg.cc/nzzVyqYQ/showbox.png))](https://postimg.cc/67kNR2P9) ShowBox | 🏴󠁧󠁢󠁥󠁮󠁧󠁿 | Shows & Movies | 4K / 1080p / 720p | ✅ | ❌ |
 | [![4khdhub.png](https://i.postimg.cc/Z5B7RF79/4khdhub.png)](https://postimg.cc/21YF9vfm) 4KHDHub | 🏴󠁧󠁢󠁥󠁮󠁧󠁿 🇮🇳 | Shows & Movies | 4K / 1080p / 720p | ✅ | ✅ |
 | [![uhdmovies.png](https://i.postimg.cc/VkCg1svN/uhdmovies.png)](https://postimg.cc/3k3mFTgM) UHDMovies | 🏴󠁧󠁢󠁥󠁮󠁧󠁿 🇮🇳 | Shows & Movies | 4K / 1080p / 720p | ✅ | ✅ |
 | 🎬 VidLink | 🏴󠁧󠁢󠁥󠁮󠁧󠁿 | Shows & Movies | 1080p / 720p | ✅ | ✅ |
@@ -35,11 +35,13 @@ A curated collection of the best high-quality scrapers compiled for the Nuvio st
 
 
 ## Disclaimer
-**No content is hosted by this repository.**
-- Providers fetch publicly available content from third-party websites.
-- For DMCA concerns, contact the actual content hosts.
-- Users are responsible for ensuring their use complies with applicable laws and regulations in their jurisdiction.
+-**No content is hosted by this repository.**
 
+- Providers fetch publicly available content from third-party websites.
+  
+- For DMCA concerns, contact the actual content hosts.
+  
+- Users are responsible for ensuring their use complies with applicable laws and regulations in their jurisdiction.
 
 
 This repository is a personal collection of public plugins made by other people for my own use. I am in no way affiliated with Nuvio or any of the listed providers. This repository is strictly for educational purposes only.
