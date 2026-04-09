@@ -36,7 +36,7 @@ A curated collection of the best high-quality scrapers compiled for the Nuvio st
 
 ## Disclaimer
 **No content is hosted by this repository.**
-Providers fetch publicly available content from third-party websites.
-For DMCA concerns, contact the actual content hosts.
+- Providers fetch publicly available content from third-party websites.
+- For DMCA concerns, contact the actual content hosts.
 
 This repository is a personal collection of publicly made plugins by other people for my own use. I am in no way affiliated with Nuvio or any of the listed providers.
