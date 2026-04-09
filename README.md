@@ -43,5 +43,5 @@ This repository is a personal collection of public plugins made by other people 
 
 
 ## Credits
-Yoruix: Providers & sections of README
-D3adlyRocket: UHDMovies provider & sections of README
+- **Yoruix**:Providers & sections of README
+- **D3adlyRocket**: UHDMovies provider & sections of README
