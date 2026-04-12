@@ -1366,13 +1366,13 @@ function getStreams(tmdbId, mediaType = 'movie', season = null, episode = null) 
                         else qualityStr = '240p';
 
                         return {
-                            name: `Moviesdrive ${serverName}`,
+                            name: `MoviesDrive ${serverName}`,
                             title: mediaTitle,
                             url: link.url,
                             quality: qualityStr,
                             size: formattedSize,
                             headers: HEADERS,
-                            provider: 'Moviesdrive'
+                            provider: 'MoviesDrive'
                         };
                     });
 
