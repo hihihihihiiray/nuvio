@@ -1,26 +1,16 @@
 # The Best Nuvio Plugins
 
-A curated collection of the best high-quality scrapers compiled for the Nuvio streaming application. These plugins allow you to fetch high-quality, bufferless streams from various sources directly within the app.
+A curated collection of the best high-quality scrapers compiled for the Nuvio streaming application. These plugins allow you to fetch premium streams from various sources directly within the app.
 
 ## Installation
 
 1. Open the **Nuvio** app
-2. Go to **Settings → Plugins → Scroll down → Click on "Add new repository"**
+2. Go to **Settings → Plugins → Click on "Add new repository"**
 3. Paste this URL:
    ```
    https://raw.githubusercontent.com/hihihihihiiray/plugins/refs/heads/main
    ```
 4. Enable the plugins you want to use
-
-   
-## Features
-
-- 🎬 Movies and TV Shows support
-- 🎯 Automatic TMDB integration
-- 📊 Multiple quality options
-- 🌍 Multi-language support
-- ⚡ Fast and reliable scraping
-- 🔒 Proper headers and referer handling
 
 
 ## Available Plugins
