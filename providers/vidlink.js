@@ -1,7 +1,6 @@
-/**
- * vidlink - Built from src/vidlink/
- * Generated: 2025-12-31T21:23:16.719Z
- */
+// VidLink Scraper for Nuvio Local Scrapers
+// React Native compatible version
+
 "use strict";
 var __defProp = Object.defineProperty;
 var __defProps = Object.defineProperties;
