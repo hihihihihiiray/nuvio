@@ -1,7 +1,6 @@
-/**
- * 4khdhub - Built from src/4khdhub/
- * Generated: 2025-12-31T21:33:16.718Z
- */
+/// 4KHDHub Scraper for Nuvio Local Scrapers
+// React Native compatible
+
 "use strict";
 var __defProp = Object.defineProperty;
 var __defProps = Object.defineProperties;
