@@ -65,7 +65,7 @@
       ]
     },
     {
-      "id": "dahmermovies",
+      "id": "111movies",
       "name": "111Movies",
       "description": "111Movies streaming service. Can be slow at times to fetch and stream, only use if needed. Formerly DahmerMovies. (~4-10s)",
       "version": "1.2",
