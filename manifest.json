@@ -65,22 +65,22 @@
       ]
     },
     {
-      "id": "111movies",
-      "name": "111Movies",
-      "description": "111Movies streaming service. Can be slow at times to fetch and stream, only use if needed. Formerly DahmerMovies. (~4-10s)",
+      "id": "dahmermovies",
+      "name": "DahmerMovies",
+      "description": "DahmerMovies streaming service. Can be slow at times to fetch and stream, only use if needed. l (~4-10s)",
       "version": "1.2",
       "author": "Nuvio Team",
       "supportedTypes": [
         "movie",
         "tv"
       ],
-      "filename": "providers/111movies.js",
+      "filename": "providers/dahmermovies.js",
       "enabled": true,
       "formats": [
         "mkv",
         "m3u8"
       ],
-      "logo": "https://ruayamo.s-ul.eu/3B2IlrAI",
+      "logo": "https://image.similarpng.com/file/similarpng/very-thumbnail/2021/05/Letter-D-logo-design-template-with-geometric-shape-style-on-transparent-background-PNG.png",
       "contentLanguage": [
         "en"
       ]
