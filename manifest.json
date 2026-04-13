@@ -6,7 +6,7 @@
       "id": "showbox",
       "name": "ShowBox",
       "description": "ShowBox streaming with multiple quality options and versions (~2s)",
-      "version": "1.0",
+      "version": "2.0",
       "author": "Nuvio Team",
       "supportedTypes": [
         "movie",
@@ -28,7 +28,7 @@
       "id": "4khdhub",
       "name": "4KHDHub",
       "description": "Direct links up to 4K (~3s)",
-      "version": "1.0.2",
+      "version": "1.4",
       "author": "Nuvio Team",
       "supportedTypes": [
         "movie",
@@ -48,7 +48,7 @@
       "id": "uhdmovies",
       "name": "UHDMovies",
       "description": "UHDMovies streaming with multiple resolutions (~3.5s)",
-      "version": "1.2",
+      "version": "1.3",
       "author": "D3adlyRocket",
       "supportedTypes": [
         "movie",
@@ -68,7 +68,7 @@
       "id": "dahmermovies",
       "name": "DahmerMovies",
       "description": "DahmerMovies streaming service. Can be slow at times to fetch and stream, only use if needed. (~4-10s)",
-      "version": "1.0.1",
+      "version": "1.2",
       "author": "Nuvio Team",
       "supportedTypes": [
         "movie",
