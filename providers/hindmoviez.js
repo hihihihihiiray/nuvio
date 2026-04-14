@@ -1,18 +1,5 @@
-/**
- * ╔══════════════════════════════════════════════════════════════════════════════╗
- * ║                       HindMoviez — Nuvio Stream Plugin                      ║
- * ╠══════════════════════════════════════════════════════════════════════════════╣
- * ║  Source     › https://hindmovie.ltd                                         ║
- * ║  Author     › Sanchit  |  TG: @S4NCHITT                                     ║
- * ║  Project    › Murph's Streams                                                ║
- * ║  Manifest   › https://badboysxs-morpheus.hf.space/manifest.json             ║
- * ╠══════════════════════════════════════════════════════════════════════════════╣
- * ║  Supports   › Movies & Series  (480p / 720p / 1080p / 4K)                   ║
- * ║  Chain      › mvlink.site → hshare.ink → hcloud → Servers                   ║
- * ║  Info       › Quality + Language parsed from page headings                  ║
- * ║  Parallel   › All links resolved concurrently                                ║
- * ╚══════════════════════════════════════════════════════════════════════════════╝
- */
+// HindMoviez Scraper for Nuvio Local Scrapers by Sanchit
+// React Native compatible version
 
 'use strict';
 
@@ -538,17 +525,13 @@ function getStreams(tmdbId, type, season, episode) {
                 var url = res.servers[serverName];
                 if (!url) return;
 
-                // ── Stream name (shown in picker) ────────────────────────────
-                // e.g. "🎬 HindMoviez | Server 1 | 1080p · Web-DL · Hindi + English · 2.3GB"
-                var streamName = '🎬 HindMoviez | ' + serverName + ' | ' + infoLabel;
+                // ── Stream name: "HindMoviez | Server 1 - 1080p" ────────────
+                var streamName = 'HindMoviez | ' + serverName + (info.quality ? ' - ' + info.quality : '');
 
                 // ── Stream title (subtitle lines below name) ──────────────────
                 var titleLines = [];
-                if (info.quality)            titleLines.push('📺 ' + info.quality + (info.is10bit ? ' 10bit' : ''));
                 if (info.source)             titleLines.push('🎞 ' + info.source);
                 if (info.languages.length)   titleLines.push('🔊 ' + info.languages.join(' + '));
-                if (info.size)               titleLines.push('💾 ' + info.size);
-                titleLines.push('by Sanchit · @S4NCHITT · Murph\'s Streams');
 
                 // Route through Cloudflare Worker for seek + edge cache + TV compatibility
                 var proxiedUrl = hmProxyUrl(url);
@@ -567,6 +550,13 @@ function getStreams(tmdbId, type, season, episode) {
             });
 
             console.log(PLUGIN_TAG + ' Done — ' + streams.length + ' stream(s) ready.');
+
+            // Sort by resolution highest first
+            var qualityOrder = { '2160p': 5, '1080p': 4, '720p': 3, '480p': 2, '360p': 1 };
+            streams.sort(function(a, b) {
+              return (qualityOrder[b.quality] || 0) - (qualityOrder[a.quality] || 0);
+            });
+
             return streams;
           });
         });
