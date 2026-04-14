@@ -131,6 +131,28 @@
       ]
     },
     {
+      "id": "hindmoviez",
+      "name": "HindMoviez",
+      "description": "HindMoviez - Hindi & English Movies and Series",
+      "version": "1.0",
+      "supportedTypes": [
+        "movie", 
+        "tv"
+      ],
+      "filename": "providers/hindmoviez.js",
+      "enabled": true,
+      "formats": [
+        "mp4", 
+        "mkv", 
+        "m3u8"
+      ],
+      "logo": "https://i.postimg.cc/5t55Csm4/hindmoviez.png",
+      "contentLanguage": [
+        "en", 
+        "hi"
+      ]
+    },
+    {
       "id": "vidlink",
       "name": "VidLink",
       "description": "Vidlink streaming with fast load times and good quality (~2s)",
