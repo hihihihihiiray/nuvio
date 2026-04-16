@@ -24,6 +24,28 @@
         "en"
       ]
     },
+    { 
+      "id": "hhh",
+      "name": "cienstrema teat",
+      "description": "ShowBox streaming with multiple quality options and versions (~3s)",
+      "version": "2.0",
+      "author": "Nuvio Team",
+      "supportedTypes": [
+        "movie",
+        "tv",
+        "anime"
+      ],
+      "filename": "providers/cinestream.js",
+      "enabled": true,
+      "formats": [
+        "mp4",
+        "mkv"
+      ],
+      "logo": "https://files.catbox.moe/4mdxz9.jpeg",
+      "contentLanguage": [
+        "en"
+      ]
+    },
     {
       "id": "4khdhub",
       "name": "4KHDHub",
