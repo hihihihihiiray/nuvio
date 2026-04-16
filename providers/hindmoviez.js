@@ -534,8 +534,7 @@ function getStreams(tmdbId, type, season, episode) {
                 if (info.quality)            titleLines.push('📺 ' + info.quality + (info.is10bit ? ' 10bit' : ''));
                 if (info.source)             titleLines.push('🎞 ' + info.source);
                 if (info.languages.length)   titleLines.push('🔊 ' + info.languages.join(' + '));
-                if (info.size)               titleLines.push('💾 ' + info.size);
-                titleLines.push('by Sanchit · @S4NCHITT · Murph\'s Streams');
+    
 
                 // Route through Cloudflare Worker for seek + edge cache + TV compatibility
                 var proxiedUrl = hmProxyUrl(url);
