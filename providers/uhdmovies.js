@@ -423,7 +423,7 @@ function extractDriveseedPage(url) {
     var quality = buildQualityLabel(qualityText);
     var labelExtras = "";
     if (fileName) labelExtras += "[" + fileName + "]";
-    if (size) labelExtras += "[" + size + "]";
+    var sizeLabel = size || null;
     var textCenterLinks = extractTextCenterLinks(html);
     var promises = [];
     textCenterLinks.forEach(function(item) {
@@ -433,31 +433,31 @@ function extractDriveseedPage(url) {
       if (text.indexOf("instant download") !== -1) {
         promises.push(
           extractInstantLink(href).then(function(link) {
-            if (link) streams.push({ name: "UHDMovies", title: "Driveseed Instant " + labelExtras, url: link, quality });
+            if (link) streams.push({ name: "UHDMovies", title: "Driveseed Instant " + labelExtras + (sizeLabel ? "\n" + sizeLabel : ""), url: link, quality });
           })
         );
       } else if (text.indexOf("resume worker bot") !== -1) {
         promises.push(
           extractResumeBot(href).then(function(link) {
-            if (link) streams.push({ name: "UHDMovies", title: "Driveseed ResumeBot " + labelExtras, url: link, quality });
+            if (link) streams.push({ name: "UHDMovies", title: "Driveseed ResumeBot " + labelExtras + (sizeLabel ? "\n" + sizeLabel : ""), url: link, quality });
           })
         );
       } else if (text.indexOf("direct links") !== -1) {
         promises.push(
           extractCFType1(baseDomain + href).then(function(links) {
             links.forEach(function(link) {
-              streams.push({ name: "UHDMovies", title: "Driveseed Direct " + labelExtras, url: link, quality });
+              streams.push({ name: "UHDMovies", title: "Driveseed Direct " + labelExtras + (sizeLabel ? "\n" + sizeLabel : ""), url: link, quality });
             });
           })
         );
       } else if (text.indexOf("resume cloud") !== -1) {
         promises.push(
           extractResumeCloudLink(baseDomain, href).then(function(link) {
-            if (link) streams.push({ name: "UHDMovies", title: "Driveseed ResumeCloud " + labelExtras, url: link, quality });
+            if (link) streams.push({ name: "UHDMovies", title: "Driveseed ResumeCloud " + labelExtras + (sizeLabel ? "\n" + sizeLabel : ""), url: link, quality });
           })
         );
       } else if (text.indexOf("cloud download") !== -1) {
-        streams.push({ name: "UHDMovies", title: "Driveseed Cloud " + labelExtras, url: href, quality });
+        streams.push({ name: "UHDMovies", title: "Driveseed Cloud " + labelExtras + (sizeLabel ? "\n" + sizeLabel : ""), url: href, quality });
       }
     });
     return Promise.all(promises).then(function() {
