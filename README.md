@@ -14,7 +14,7 @@ A curated collection of the best high-quality scrapers compiled for the Nuvio st
 
 
 ## Available Plugins
-| Provider | Language | Content | Quality | NuvioApp | NuvioTV |
+| Provider | Language | Content | Quality | Nuvio Mobile | Nuvio TV |
 | --- | --- | --- | --- | --- | --- |
 | [![showbox.png](https://i.postimg.cc/nzzVyqYQ/showbox.png)](https://postimg.cc/67kNR2P9) ShowBox | 🏴󠁧󠁢󠁥󠁮󠁧󠁿 | Shows & Movies | 4K / 1080p / 720p | ✅ | ❌ |
 | [![4khdhub.png](https://i.postimg.cc/Z5B7RF79/4khdhub.png)](https://postimg.cc/21YF9vfm) 4KHDHub | 🏴󠁧󠁢󠁥󠁮󠁧󠁿 🇮🇳 | Shows & Movies | 4K / 1080p / 720p | ✅ | ✅ |
