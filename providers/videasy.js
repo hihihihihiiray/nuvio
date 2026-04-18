@@ -124,7 +124,7 @@ function extractQuality(source) {
     if (urlMatch) return urlMatch[1] + 'p';
 
     // Handle generic quality names
-    if (/adaptive|auto/i.test(quality)) return 'Adaptive';
+    if (/adaptive|auto/i.test(quality)) return 'Auto';
     if (/hd|high/i.test(quality)) return '720p';
     if (/sd|standard/i.test(quality)) return '480p';
 
@@ -156,7 +156,7 @@ function fetchFromServer(serverName, serverConfig, mediaInfo, tmdbId, seasonNum,
 
         const streams = decrypted.sources.map(function(source) {
             const quality = extractQuality(source);
-            const streamName = `Videasy ${serverName} (${serverConfig.language}) - ${quality}`;
+            const streamName = `VidEasy ${serverName} - ${quality}`;
 
             return {
                 name: streamName,
