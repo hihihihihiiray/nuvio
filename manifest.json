@@ -177,7 +177,7 @@
     {
       "id": "videasy",
       "name": "VidEasy",
-      "description": "VidEasy streaming with multiple server support. Can be slow at times. (~6s)",
+      "description": "VidEasy streaming with multiple server support. Can be slow at times. (~3s)",
       "version": "1.0",
       "author": "Nuvio Team",
       "supportedTypes": [
