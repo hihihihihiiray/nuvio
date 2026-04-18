@@ -9,13 +9,13 @@ const TMDB_BASE_URL = 'https://api.themoviedb.org/3';
 const DECRYPT_API = 'https://enc-dec.app/api/dec-videasy';
 
 const HEADERS = {
-    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36',
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36',
     'Accept': '*/*',
-    'Origin': 'https://player.videasy.net',
-    'Referer': 'https://player.videasy.net/'
+    'Origin': 'https://cineby.sc',
+    'Referer': 'https://cineby.sc/'
 };
 
-// Server configurations from Python sample
+// Server configurations
 const SERVERS = {
     'Neon': { url: 'https://api.videasy.net/myflixerzupcloud/sources-with-title', language: 'Original' },
     'Sage': { url: 'https://api.videasy.net/1movies/sources-with-title', language: 'Original' },
@@ -25,15 +25,6 @@ const SERVERS = {
     'Breach': { url: 'https://api.videasy.net/m4uhd/sources-with-title', language: 'Original' },
     'Vyse': { url: 'https://api.videasy.net/hdmovie/sources-with-title', language: 'Original' },
     'Jett': { url: 'https://api.videasy.net/primesrcme/sources-with-title', language: 'Original' },
-    'Killjoy': { url: 'https://api.videasy.net/meine/sources-with-title', language: 'German', params: { language: 'german' } },
-    'Harbor': { url: 'https://api.videasy.net/meine/sources-with-title', language: 'Italian', params: { language: 'italian' } },
-    'Chamber': { url: 'https://api.videasy.net/meine/sources-with-title', language: 'French', params: { language: 'french' }, moviesOnly: true },
-    'Fade': { url: 'https://api.videasy.net/hdmovie/sources-with-title', language: 'Hindi' },
-    'Gekko': { url: 'https://api2.videasy.net/cuevana-latino/sources-with-title', language: 'Latin' },
-    'Kayo': { url: 'https://api2.videasy.net/cuevana-spanish/sources-with-title', language: 'Spanish' },
-    'Raze': { url: 'https://api.videasy.net/superflix/sources-with-title', language: 'Portuguese' },
-    'Phoenix': { url: 'https://api2.videasy.net/overflix/sources-with-title', language: 'Portuguese' },
-    'Astra': { url: 'https://api.videasy.net/visioncine/sources-with-title', language: 'Portuguese' }
 };
 
 // Helper function to make HTTP requests
@@ -163,13 +154,7 @@ function fetchFromServer(serverName, serverConfig, mediaInfo, tmdbId, seasonNum,
             return [];
         }
 
-        // Filter out HDR sources (they may cause playback issues)
-        const nonHDRSources = decrypted.sources.filter(function(source) {
-            const quality = source.quality || '';
-            return !quality.toUpperCase().includes('HDR');
-        });
-
-        const streams = nonHDRSources.map(function(source) {
+        const streams = decrypted.sources.map(function(source) {
             const quality = extractQuality(source);
             const streamName = `Videasy ${serverName} (${serverConfig.language}) - ${quality}`;
 
@@ -180,8 +165,8 @@ function fetchFromServer(serverName, serverConfig, mediaInfo, tmdbId, seasonNum,
                 quality: quality,
                 headers: {
                     'User-Agent': HEADERS['User-Agent'],
-                    'Origin': 'https://player.videasy.net',
-                    'Referer': 'https://player.videasy.net/'
+                    'Referer': HEADERS['Referer'],
+                    'Origin': HEADERS['Origin']
                 },
                 provider: 'videasy'
             };
