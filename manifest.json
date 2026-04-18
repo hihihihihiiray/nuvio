@@ -177,7 +177,7 @@
     {
       "id": "videasy",
       "name": "VidEasy",
-      "description": "VideoEasy streaming with multiple server support",
+      "description": "VidEasy streaming with multiple server support. Can be slow at times. (~6s)",
       "version": "1.0",
       "author": "Nuvio Team",
       "supportedTypes": [
@@ -188,12 +188,11 @@
       "enabled": true,
       "formats": [
         "m3u8",
-        "mp4",
-        "mkv"
+        "mp4"
       ],
-      "logo": "https://www.videasy.net/logo.png",
+      "logo": "https://vidlink.pro/favicon.ico",
       "contentLanguage": [
-        "en",
+        "en"
       ]
     },
     {
