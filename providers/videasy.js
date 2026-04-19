@@ -11,8 +11,8 @@ const DECRYPT_API = 'https://enc-dec.app/api/dec-videasy';
 const HEADERS = {
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36',
     'Accept': '*/*',
-    'Origin': 'https://player.videasy.net',
-    'Referer': 'https://player.videasy.net/'
+    'Origin': 'https://fmovies.gd',
+    'Referer': 'https://fmovies.gd/'
 };
 
 // Server configurations
