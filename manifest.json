@@ -177,7 +177,7 @@
     {
       "id": "videasy",
       "name": "VidEasy",
-      "description": "VidEasy streaming with multiple server support. Can be slow at times. (~3s)",
+      "description": "VidEasy streaming with multiple server support. (~2.5s)",
       "version": "1.0",
       "author": "raymondnoodles",
       "supportedTypes": [
@@ -199,13 +199,12 @@
     { 
       "id": "vidfast",
       "name": "VidFast",
-      "description": "VidFast streaming with high-quality links and quick load times (CURRENTLY BROKEN)",
+      "description": "VidFast streaming with high-quality links and quick load times",
       "version": "1.0",
       "author": "raymondnoodles",
       "supportedTypes": [
         "movie",
-        "tv",
-        "anime"
+        "tv"
       ],
       "filename": "providers/vidfast.js",
       "enabled": false,
