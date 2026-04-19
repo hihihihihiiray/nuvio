@@ -12,6 +12,7 @@ const VERSION = "1";
 
 const HEADERS = {
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36',
+    'Origin': 'https://vidfast.pro'
     'Referer': 'https://vidfast.pro/',
     'X-Requested-With': 'XMLHttpRequest'
 };
@@ -70,25 +71,6 @@ function getVidFastUrls(extractedText) {
     });
 }
 
-// Extract quality from stream data
-function extractQuality(data) {
-    // VidFast streams come in different formats - check for quality indicators
-    const url = data.url || '';
-    
-    // Check URL for quality
-    if (/2160|4k/i.test(url)) return '4K';
-    if (/1440/i.test(url)) return '1440p';
-    if (/1080/i.test(url)) return '1080p';
-    if (/720/i.test(url)) return '720p';
-    if (/480/i.test(url)) return '480p';
-    if (/360/i.test(url)) return '360p';
-    
-    // Check for HLS/adaptive
-    if (url.includes('.m3u8')) return 'Adaptive';
-    
-    return 'Unknown';
-}
-
 // Fetch stream from a single server
 function fetchServerStream(serverData, streamBaseUrl, token, mediaInfo) {
     const streamUrl = `${streamBaseUrl}/${serverData.data}`;
@@ -102,29 +84,51 @@ function fetchServerStream(serverData, streamBaseUrl, token, mediaInfo) {
     }).then(function(response) {
         return response.json();
     }).then(function(data) {
-        // Stream response is plain JSON (NOT encrypted)
-        if (!data || !data.url) {
-            return null;
+        // Stream response has structure: { sources: [...], tracks: [...] }
+        if (!data || !data.sources || !Array.isArray(data.sources)) {
+            return [];
         }
 
-        const quality = extractQuality(data);
         const serverName = serverData.name || 'Server';
-        const streamName = `VidFast ${serverName} - ${quality}`;
 
-        return {
-            name: streamName,
-            title: `${mediaInfo.title} (${mediaInfo.year})`,
-            url: data.url,
-            quality: quality,
-            headers: {
-                'User-Agent': HEADERS['User-Agent'],
-                'Referer': 'https://vidfast.pro/'
-            },
-            provider: 'vidfast'
-        };
+        return data.sources.map(function(source) {
+            let quality = source.quality || 'Unknown';
+            
+            // Normalize quality
+            if (/2160|4k/i.test(quality)) quality = '2160p';
+            else if (/1440/i.test(quality)) quality = '1440p';
+            else if (/1080/i.test(quality)) quality = '1080p';
+            else if (/720/i.test(quality)) quality = '720p';
+            else if (/480/i.test(quality)) quality = '480p';
+            else if (/360/i.test(quality)) quality = '360p';
+            else if (/auto|adaptive/i.test(quality)) quality = 'Auto';
+            
+            // Try extracting from URL if still unknown
+            if (quality === 'Unknown') {
+                const urlMatch = source.url?.match(/(\d{3,4})[pP]/);
+                if (urlMatch) quality = `${urlMatch[1]}p`;
+            }
+
+            const streamName = `VidFast ${serverName} - ${quality}`;
+
+            return {
+                name: streamName,
+                title: `${mediaInfo.title} (${mediaInfo.year})`,
+                url: source.url,
+                quality: quality,
+                headers: {
+                    'User-Agent': HEADERS['User-Agent'],
+                    'Origin': HEADERS['Origin'],
+                    'Referer': HEADERS['Referer']
+                },
+                provider: 'vidfast'
+            };
+        }).filter(function(stream) {
+            return stream.url && stream.url.startsWith('http');
+        });
     }).catch(function(error) {
         console.log(`[VidFast] Server ${serverData.name || 'unknown'} failed: ${error.message}`);
-        return null;
+        return [];
     });
 }
 
@@ -169,13 +173,13 @@ async function scrapeVidFast(tmdbId, mediaInfo, seasonNum, episodeNum) {
     });
 
     const results = await Promise.all(streamPromises);
-    const validStreams = results.filter(s => s !== null);
+    const allStreams = results.flat(); // Flatten since each server returns an array
 
     // Deduplicate by URL
     const uniqueStreams = [];
     const seenUrls = new Set();
 
-    validStreams.forEach(function(stream) {
+    allStreams.forEach(function(stream) {
         if (!seenUrls.has(stream.url)) {
             seenUrls.add(stream.url);
             uniqueStreams.push(stream);
