@@ -199,7 +199,7 @@
     { 
       "id": "vidfast",
       "name": "VidFast",
-      "description": "VidFast streaming with high-quality links and quick load times (~3s)",
+      "description": "VidFast streaming with high-quality links and quick load times (CURRENTLY BROKEN)",
       "version": "1.0",
       "author": "raymondnoodles",
       "supportedTypes": [
@@ -208,7 +208,7 @@
         "anime"
       ],
       "filename": "providers/vidfast.js",
-      "enabled": true,
+      "enabled": false,
       "formats": [
         "mp4",
         "mkv"
