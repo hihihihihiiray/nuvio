@@ -179,7 +179,7 @@
       "name": "VidEasy",
       "description": "VidEasy streaming with multiple server support. Can be slow at times. (~3s)",
       "version": "1.0",
-      "author": "Nuvio Team",
+      "author": "raymondnoodles",
       "supportedTypes": [
         "movie",
         "tv"
@@ -192,6 +192,28 @@
         "mkv"
       ],
       "logo": "https://www.videasy.net/logo.png",
+      "contentLanguage": [
+        "en"
+      ]
+    },
+    { 
+      "id": "vidfast",
+      "name": "VidFast",
+      "description": "VidFast streaming with high-quality links and quick load times (~3s)",
+      "version": "1.0",
+      "author": "raymondnoodles",
+      "supportedTypes": [
+        "movie",
+        "tv",
+        "anime"
+      ],
+      "filename": "providers/vidfast.js",
+      "enabled": true,
+      "formats": [
+        "mp4",
+        "mkv"
+      ],
+      "logo": "https://www.vidfast.net/favicon.ico",
       "contentLanguage": [
         "en"
       ]
