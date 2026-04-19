@@ -19,6 +19,7 @@ const HEADERS = {
 const SERVERS = {
     'Neon': { url: 'https://api.videasy.net/myflixerzupcloud/sources-with-title', language: 'Original' },
     'Yoru': { url: 'https://api.videasy.net/cdn/sources-with-title', language: 'Original', moviesOnly: true },
+};
 
 // Helper function to make HTTP requests
 function makeRequest(url, options = {}) {
