@@ -167,8 +167,8 @@ function fetchFromServer(serverName, serverConfig, mediaInfo, tmdbId, seasonNum,
                 quality: quality,
                 headers: {
                     'User-Agent': HEADERS['User-Agent'],
-                    'Origin': 'https://cineby.sc',
-                    'Referer': 'https://cineby.sc/'
+                    'Origin': HEADERS['Origin'],
+                    'Referer': HEADERS['Referer']
                 },
                 provider: 'videasy'
             };
