@@ -33,45 +33,141 @@ async function scrapeVidFast(tmdbId, mediaInfo, seasonNum, episodeNum) {
         ? `${VIDFAST_BASE}/tv/${tmdbId}/${seasonNum}/${episodeNum}`
         : `${VIDFAST_BASE}/movie/${tmdbId}`;
 
-    // Headers with dynamic referer (CRITICAL - must be page URL)
+    // Headers matching browser but without Accept-Encoding (Node handles that)
     const headers = {
         'Accept': '*/*',
-        'User-Agent': 'Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Mobile Safari/537.36',
+        'Accept-Language': 'en-US,en;q=0.9',
+        'Connection': 'keep-alive',
+        'Origin': 'https://vidfast.pro',
         'Referer': pageUrl,
+        'Sec-Fetch-Dest': 'empty',
+        'Sec-Fetch-Mode': 'cors',
+        'Sec-Fetch-Site': 'cross-site',
+        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.3 Safari/605.1.15',
         'X-Requested-With': 'XMLHttpRequest'
     };
 
     // Step 1: Fetch page
     const pageResponse = await fetch(pageUrl, { headers });
-    const pageText = await pageResponse.text();
-
-    // Step 2: Extract encrypted text with fallback patterns
-    let match = pageText.match(/\\"en\\":\\"([^"]+)\\"/) ||
-        pageText.match(/"en":"([^"]+)"/) ||
-        pageText.match(/'en':'([^']+)'/) ||
-        pageText.match(/["']en["']:\s*["']([^"']+)["']/);
-
-    if (!match) {
-        console.log('[VidFast] Could not extract data from page');
+    
+    if (!pageResponse.ok) {
+        console.log(`[VidFast] Page fetch failed: HTTP ${pageResponse.status}: ${pageResponse.statusText}`);
+        console.log(`[VidFast] Response headers:`, Object.fromEntries(pageResponse.headers.entries()));
+        const errorText = await pageResponse.text();
+        console.log(`[VidFast] Error response (first 500 chars):`, errorText.substring(0, 500));
         return [];
     }
-    const rawData = match[1];
+    
+    const pageText = await pageResponse.text();
+    
+    console.log(`[VidFast] Page text length: ${pageText.length}`);
+    console.log(`[VidFast] Page sample (first 1000 chars):`);
+    console.log(pageText.substring(0, 1000));
+
+    // Step 2: Extract data - Next.js apps store it in script tags
+    let rawData = null;
+    
+    // Pattern 1: Look for __NEXT_DATA__ script tag
+    const nextDataMatch = pageText.match(/<script id="__NEXT_DATA__"[^>]*>(.*?)<\/script>/s);
+    if (nextDataMatch) {
+        try {
+            const jsonData = JSON.parse(nextDataMatch[1]);
+            console.log('[VidFast] Found __NEXT_DATA__, structure:', Object.keys(jsonData));
+            // Try to find the encrypted text in the props
+            const propsStr = JSON.stringify(jsonData);
+            const dataMatch = propsStr.match(/"en":"([^"]+)"/);
+            if (dataMatch) rawData = dataMatch[1];
+        } catch (e) {
+            console.log('[VidFast] Failed to parse __NEXT_DATA__:', e.message);
+        }
+    }
+    
+    // Pattern 2: Look for inline data variables
+    if (!rawData) {
+        const patterns = [
+            /"en":"([^"]+)"/,
+            /'en':'([^']+)'/,
+            /\\"en\\":\\"([^"]+)\\"/,
+            /data\s*=\s*"([^"]+)"/,
+            /encryptedData\s*=\s*"([^"]+)"/
+        ];
+        
+        for (const pattern of patterns) {
+            const match = pageText.match(pattern);
+            if (match) {
+                rawData = match[1];
+                console.log(`[VidFast] Found data with pattern: ${pattern}`);
+                break;
+            }
+        }
+    }
+
+    if (!rawData) {
+        console.log('[VidFast] Could not extract data from page');
+        console.log('[VidFast] Checking for common patterns:');
+        console.log('  - Has __NEXT_DATA__:', pageText.includes('__NEXT_DATA__'));
+        console.log('  - Has "en":', pageText.includes('"en"'));
+        console.log('  - Has script tags:', (pageText.match(/<script/g) || []).length);
+        return [];
+    }
+    
+    console.log(`[VidFast] Extracted data length: ${rawData.length}`);
+    console.log(`[VidFast] Data sample: ${rawData.substring(0, 100)}...`);
 
     // Step 3: Get servers and stream URLs
-    const apiResponse = await fetch(`${ENCRYPT_API}?text=${encodeURIComponent(rawData)}`);
+    const apiUrl = `${ENCRYPT_API}?text=${encodeURIComponent(rawData)}&version=1`;
+    console.log(`[VidFast] Calling enc-vidfast API...`);
+    console.log(`[VidFast] API URL: ${apiUrl.substring(0, 100)}...`);
+    
+    const apiResponse = await fetch(apiUrl);
+    console.log(`[VidFast] API response status: ${apiResponse.status}`);
+    
+    if (!apiResponse.ok) {
+        const errorText = await apiResponse.text();
+        console.log(`[VidFast] API error response: ${errorText}`);
+        return [];
+    }
+    
     const apiData = await apiResponse.json();
+    console.log(`[VidFast] API response:`, apiData);
 
     if (apiData.status !== 200 || !apiData.result) {
         console.log('[VidFast] enc-vidfast API failed');
+        console.log('[VidFast] API status:', apiData.status);
+        console.log('[VidFast] API message:', apiData.message || 'No message');
         return [];
     }
 
     const apiServers = apiData.result.servers;
     const streamBase = apiData.result.stream;
+    const token = apiData.result.token;
+    
+    console.log(`[VidFast] Got servers URL, stream URL, and token`);
+    console.log(`[VidFast] Token: ${token ? token.substring(0, 20) + '...' : 'none'}`);
+
+    // Update headers with token if provided
+    if (token) {
+        headers['X-CSRF-Token'] = token;
+    }
 
     // Step 4: Fetch servers list
-    const serversResponse = await fetch(apiServers, { headers });
-    const serverList = await serversResponse.json();
+    const serversResponse = await fetch(apiServers, { 
+        method: 'POST',
+        headers 
+    });
+    const serversEncrypted = await serversResponse.text();
+    console.log(`[VidFast] Got encrypted servers response (${serversEncrypted.length} chars)`);
+    
+    // Decrypt the servers list
+    const decryptResponse = await fetch('https://enc-dec.app/api/dec-vidfast', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text: serversEncrypted, version: '1' })
+    });
+    const decryptData = await decryptResponse.json();
+    const serverList = decryptData.result;
+    
+    console.log(`[VidFast] Decrypted servers:`, serverList);
 
     if (!serverList || !Array.isArray(serverList) || serverList.length === 0) {
         console.log('[VidFast] No servers available');
@@ -90,20 +186,25 @@ async function scrapeVidFast(tmdbId, mediaInfo, seasonNum, episodeNum) {
         const apiStream = `${streamBase}/${server}`;
 
         try {
-            const streamResponse = await fetch(apiStream, { headers });
+            const streamResponse = await fetch(apiStream, { 
+                method: 'POST',
+                headers 
+            });
 
             if (!streamResponse.ok) {
                 continue;
             }
 
-            const streamText = await streamResponse.text();
-            let data;
-
-            try {
-                data = JSON.parse(streamText);
-            } catch (e) {
-                continue;
-            }
+            const streamEncrypted = await streamResponse.text();
+            
+            // Decrypt the stream data
+            const streamDecryptResponse = await fetch('https://enc-dec.app/api/dec-vidfast', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ text: streamEncrypted, version: '1' })
+            });
+            const streamDecryptData = await streamDecryptResponse.json();
+            const data = streamDecryptData.result;
 
             if (!data.url) {
                 continue;
