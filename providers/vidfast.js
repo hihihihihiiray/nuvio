@@ -15,7 +15,7 @@ const DECRYPT_API = 'https://enc-dec.app/api/dec-vidfast';
 // ex. const ALLOWED_SERVERS = ['Server1', 'Server2'];
 
 // Filter by description if applied (e.g., only original audio)
-const FILTER_DESCRIPTION = ['Original audio', 'Anime DUB'];
+const FILTER_DESCRIPTION = 'Original audio';
 
 // Exclude specific servers (if applied)
 // ex. const BLOCKED_SERVERS = ['Server3', 'Server4'];
