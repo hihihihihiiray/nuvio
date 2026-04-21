@@ -192,9 +192,8 @@ async function scrapeVidFast(tmdbId, mediaInfo, seasonNum, episodeNum) {
                     url: data.url,
                     quality: quality,
                     headers: {
-                        'User-Agent': headers['User-Agent'],
-                        'Origin': 'https://vidfast.pro',
-                        'Referer': pageUrl
+                        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+                        'Referer': 'https://vidfast.pro/'
                     },
                     provider: 'vidfast'
                 });
