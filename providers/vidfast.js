@@ -238,7 +238,7 @@ async function scrapeVidFast(tmdbId, mediaInfo, seasonNum, episodeNum) {
                     if (qualityMatch) {
                         quality = `${qualityMatch[1]}p`;
                     } else if (data.url.includes('.m3u8')) {
-                        quality = 'Adaptive';
+                        quality = 'Auto';
                     }
                 }
 
@@ -248,7 +248,7 @@ async function scrapeVidFast(tmdbId, mediaInfo, seasonNum, episodeNum) {
                     url: data.url,
                     quality: quality,
                     headers: {
-                        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+                        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36',
                         'Referer': 'https://vidfast.pro/'
                     },
                     provider: 'vidfast'
