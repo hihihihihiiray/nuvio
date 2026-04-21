@@ -10,6 +10,17 @@ const VIDFAST_BASE = 'https://vidfast.pro';
 const ENCRYPT_API = 'https://enc-dec.app/api/enc-vidfast';
 const DECRYPT_API = 'https://enc-dec.app/api/dec-vidfast';
 
+
+// Filter by server names (if applied)
+// ex. const ALLOWED_SERVERS = ['Server1', 'Server2'];
+
+// Filter by description if applied (e.g., only original audio)
+const FILTER_DESCRIPTION = ['Original audio', 'Anime DUB'];
+
+// Exclude specific servers (if applied)
+// ex. const BLOCKED_SERVERS = ['Server3', 'Server4'];
+const BLOCKED_SERVERS = ['Beta', 'Iron', 'Viper', 'Specter', 'Ranger', 'Echo', 'Charlie'];
+
 // Get TMDB details
 function getTMDBDetails(tmdbId, mediaType) {
     const endpoint = mediaType === 'tv' ? 'tv' : 'movie';
@@ -136,10 +147,33 @@ async function scrapeVidFast(tmdbId, mediaInfo, seasonNum, episodeNum) {
             body: JSON.stringify({ text: serversEncrypted, version: '1' })
         });
         const decryptData = await decryptResponse.json();
-        const serverList = decryptData.result;
+        let serverList = decryptData.result;
 
         if (!serverList || !Array.isArray(serverList) || serverList.length === 0) {
             console.log('[VidFast] No servers available');
+            return [];
+        }
+
+        // Apply server filtering
+        if (typeof ALLOWED_SERVERS !== 'undefined') {
+            serverList = serverList.filter(s => ALLOWED_SERVERS.includes(s.name));
+            console.log(`[VidFast] Filtered to allowed servers: ${serverList.length} remaining`);
+        }
+        
+        if (typeof FILTER_DESCRIPTION !== 'undefined') {
+            serverList = serverList.filter(s => 
+                s.description && s.description.includes(FILTER_DESCRIPTION)
+            );
+            console.log(`[VidFast] Filtered by description "${FILTER_DESCRIPTION}": ${serverList.length} remaining`);
+        }
+        
+        if (typeof BLOCKED_SERVERS !== 'undefined') {
+            serverList = serverList.filter(s => !BLOCKED_SERVERS.includes(s.name));
+            console.log(`[VidFast] Blocked servers removed: ${serverList.length} remaining`);
+        }
+
+        if (serverList.length === 0) {
+            console.log('[VidFast] No servers after filtering');
             return [];
         }
 
