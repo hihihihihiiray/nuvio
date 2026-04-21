@@ -177,7 +177,7 @@
     {
       "id": "videasy",
       "name": "VidEasy",
-      "description": "VidEasy streaming with multiple server support. (~2.5s)",
+      "description": "VidEasy streaming with multiple server support (~2.5s)",
       "version": "1.0",
       "author": "raymondnoodles",
       "supportedTypes": [
@@ -199,7 +199,7 @@
     { 
       "id": "vidfast",
       "name": "VidFast",
-      "description": "VidFast streaming with high-quality links and quick load times (~6s)",
+      "description": "VidFast streaming with high-quality links and multi-server support (~6s)",
       "version": "2.0",
       "author": "raymondnoodles",
       "supportedTypes": [
