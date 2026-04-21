@@ -10,7 +10,6 @@ const VIDFAST_BASE = 'https://vidfast.pro';
 const ENCRYPT_API = 'https://enc-dec.app/api/enc-vidfast';
 const DECRYPT_API = 'https://enc-dec.app/api/dec-vidfast';
 const ALLOWED_SERVERS = ['Alpha', 'Cobra', 'Max', 'Oscar', 'vEdge', 'vFast', 'vRapid'];
-const BLOCKED_SERVERS = ['Beta', 'Iron', 'Viper', 'Specter', 'Ranger', 'Echo', 'Charlie', 'Vodka', 'Pablo', 'Loco', 'Samba', 'Bollywood'];
 
 
 // Parse HLS master playlist to extract quality variants
