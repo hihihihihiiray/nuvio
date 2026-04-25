@@ -199,7 +199,7 @@
     { 
       "id": "vidfast",
       "name": "VidFast",
-      "description": "VidFast streaming with multi-server support and automatic quality changing (~6s)",
+      "description": "VidFast streaming with multi-server support and automatic quality changing (Broken)",
       "version": "2.0",
       "author": "raymondnoodles",
       "supportedTypes": [
