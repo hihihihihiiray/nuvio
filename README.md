@@ -25,7 +25,6 @@ A curated collection of the best high-quality scrapers compiled for the Nuvio st
 | [![JYryAtEn](https://ruayamo.s-ul.eu/JYryAtEn)](https://postimg.cc/hJJCb5bv) HindMoviez | 🏴󠁧󠁢󠁥󠁮󠁧󠁿 🇮🇳 | Shows & Movies | 4K / 1080p / 720p
 | 🎬 VidLink | 🏴󠁧󠁢󠁥󠁮󠁧󠁿 | Shows & Movies | 1080p / 720p
 | [![0MHxk3jE](https://ruayamo.s-ul.eu/0MHxk3jE)](https://postimg.cc/DJNNcCd9) VidEasy | 🏴󠁧󠁢󠁥󠁮󠁧󠁿 | Shows & Movies | 4K / 1080p / 720p
-| [![x6exNRUb](https://ruayamo.s-ul.eu/x6exNRUb)](https://postimg.cc/754Dch6T) VidFast | 🏴󠁧󠁢󠁥󠁮󠁧󠁿 | Shows & Movies | 1080p / 720p
 | [![animekai.png](https://i.postimg.cc/cLCqcnFV/animekai.png)](https://postimg.cc/9r6Nmr5p) AnimeKai | 🏴󠁧󠁢󠁥󠁮󠁧󠁿 🇯🇵 | Anime (Shows & Movies) | 1080p / 720p
 
 **Total Number of Plugins**: **11**
