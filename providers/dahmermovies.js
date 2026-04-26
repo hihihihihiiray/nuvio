@@ -1,4 +1,4 @@
-// Dahmer Movies Scraper for Nuvio Local Scrapers
+// DahmerMovies Scraper for Nuvio Local Scrapers
 // React Native compatible version
 
 console.log('[DahmerMovies] Initializing Dahmer Movies scraper');
@@ -9,8 +9,8 @@ const DAHMER_MOVIES_API = 'https://a.111477.xyz';
 const TIMEOUT = 4000; // 4 seconds
 
 const BATCH_SIZE = 3;          // links resolved in parallel per batch
-const BATCH_GAP_MS = 350;      // gap between batches (only paid when a 429 occurred)
-const RETRY_MS = 8000;    // wait on 429 before retrying a single link
+const BATCH_GAP_MS = 450;      // gap between batches (only paid when a 429 occurred)
+const RETRY_MS = 7500;    // wait on 429 before retrying a single link
 
 // Quality mapping
 const Qualities = {
@@ -353,7 +353,7 @@ async function invokeDahmerMovies(title, year, season = null, episode = null) {
         return [];
     }
 
-    const pathsToProcess = filteredPaths.slice(0, 10);
+    const pathsToProcess = filteredPaths.slice(0, 15);
     const results = [];
 
     try {
