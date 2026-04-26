@@ -441,7 +441,7 @@ function formatToNuvioStreams(formattedData, mediaTitle) {
     var typeMap = {
         'sub': 'Hard Sub',
         'softsub': 'Soft Sub',
-        'dub': 'Dub & S-Sub'
+        'dub': 'Dub'
     };
 
     // Deduplicate by URL
