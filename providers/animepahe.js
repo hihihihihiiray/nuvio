@@ -1,7 +1,6 @@
-/**
- * animepahe - Built from src/animepahe/
- * Generated: 2026-03-23T01:16:01.613Z
- */
+// AnimePahe Scraper for Nuvio Local Scrapers
+// React Native compatible version
+
 var __create = Object.create;
 var __defProp = Object.defineProperty;
 var __defProps = Object.defineProperties;
@@ -74,10 +73,10 @@ var __async = (__this, __arguments, generator) => {
   });
 };
 
-// src/animepahe/index.js
+// Index
 var import_cheerio_without_node_native = __toESM(require("cheerio-without-node-native"));
 
-// src/animepahe/constants.js
+// Constants
 var MAIN_URL = "https://animepahe.si";
 var PROXY_URL = "https://animepaheproxy.phisheranimepahe.workers.dev/?url=";
 var HEADERS = {
@@ -86,7 +85,7 @@ var HEADERS = {
   "Referer": "https://animepahe.si/"
 };
 
-// src/animepahe/utils.js
+// Utilities
 function fetchText(_0) {
   return __async(this, arguments, function* (url, options = {}) {
     const _a = options, { useProxy = true } = _a, fetchOptions = __objRest(_a, ["useProxy"]);
@@ -155,7 +154,7 @@ function extractQuality(text) {
   return match ? match[1] : "720p";
 }
 
-// src/animepahe/extractors.js
+// Extraction logic
 function unpack(code) {
   try {
     const match = code.match(/}\((['"])([\s\S]*?)\1,\s*(\d+),\s*(\d+),\s*(['"])([\s\S]*?)\5\.split\((['"])\|\7\)/);
@@ -227,7 +226,7 @@ function extractKwik(url) {
   });
 }
 
-// src/animepahe/index.js
+// Index
 function getStreams(tmdbId, mediaType, season, episode) {
   return __async(this, null, function* () {
     try {
