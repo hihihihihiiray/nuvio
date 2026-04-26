@@ -77,12 +77,12 @@ var __async = (__this, __arguments, generator) => {
 var import_cheerio_without_node_native = __toESM(require("cheerio-without-node-native"));
 
 // Constants
-var MAIN_URL = "https://animepahe.si";
+var MAIN_URL = "https://animepahe.pw";
 var PROXY_URL = "https://animepaheproxy.phisheranimepahe.workers.dev/?url=";
 var HEADERS = {
-  "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/120.0.0.0 Safari/537.36",
+  "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/146.0.0.0 Safari/537.36",
   "Cookie": "__ddg2_=1234567890",
-  "Referer": "https://animepahe.si/"
+  "Referer": "https://animepahe.pw/"
 };
 
 // Utilities
