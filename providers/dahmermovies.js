@@ -9,7 +9,7 @@ const DAHMER_MOVIES_API = 'https://a.111477.xyz';
 const TIMEOUT = 22000; // 22 seconds
 
 const BATCH_SIZE = 3;          // links resolved in parallel per batch
-const BATCH_GAP_MS = 1500;      // gap between batches (only paid when a 429 occurred)
+const BATCH_GAP_MS = 1200;      // gap between batches (only paid when a 429 occurred)
 const RETRY_MS = 8000;    // wait on 429 before retrying a single link
 
 // Quality mapping
@@ -34,9 +34,6 @@ function makeRequest(url, options = {}) {
             'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
             'Accept-Language': 'en-US,en;q=0.5',
             'Connection': 'keep-alive',
-            'Sec-Fetch-Dest': 'document',
-            'Sec-Fetch-Mode': 'navigate',
-            'Sec-Fetch-Site': 'none',
             ...options.headers
         },
         ...options
