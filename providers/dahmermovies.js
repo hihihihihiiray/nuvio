@@ -10,7 +10,7 @@ const TIMEOUT = 18000; // 18 seconds
 
 const BATCH_SIZE = 3;          // links resolved in parallel per batch
 const BATCH_GAP_MS = 1200;      // gap between batches (only paid when a 429 occurred)
-const RETRY_MS = 7500;    // wait on 429 before retrying a single link
+const RETRY_MS = 8000;    // wait on 429 before retrying a single link
 
 // Quality mapping
 const Qualities = {
