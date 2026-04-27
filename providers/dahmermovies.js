@@ -6,7 +6,7 @@ console.log('[DahmerMovies] Initializing Dahmer Movies scraper');
 // Constants
 const TMDB_API_KEY = "1c29a5198ee1854bd5eb45dbe8d17d92";
 const DAHMER_MOVIES_API = 'https://a.111477.xyz';
-const TIMEOUT = 15000; // 15 seconds
+const TIMEOUT = 18; // 18 seconds
 
 const BATCH_SIZE = 3;          // links resolved in parallel per batch
 const BATCH_GAP_MS = 1200;      // gap between batches (only paid when a 429 occurred)
@@ -345,22 +345,37 @@ async function invokeDahmerMovies(title, year, season = null, episode = null) {
         if (filteredPaths.length > 0) {
             console.log(`[DahmerMovies] Found ${filteredPaths.length} 2160p links, prioritizing those`);
         } else {
-            // No 2160p found — fall back to 1080p only, take first 5 links
+            // No 2160p found — fall back to 1080p only, take first 5
             filteredPaths = paths.filter(path => /1080p/i.test(path.text)).slice(0, 5);
             console.log(`[DahmerMovies] No 2160p found, falling back to first ${filteredPaths.length} 1080p links`);
         }
     } else {
         const [seasonSlug, episodeSlug] = getEpisodeSlug(season, episode);
-        const episodePattern = new RegExp(`S${seasonSlug}E${episodeSlug}`, 'i');
-        filteredPaths = paths.filter(path => episodePattern.test(path.text));
-        console.log(`[DahmerMovies] Filtered to ${filteredPaths.length} TV episode links (S${seasonSlug}E${episodeSlug})`);
+        
+        // Build multiple patterns to match different episode naming formats:
+        // - S01E03 (standard)
+        // - 1x03 (alternate)
+        // - E03 or Episode 03 (plain episode number)
+        const patterns = [
+            new RegExp(`S${seasonSlug}E${episodeSlug}`, 'i'),           // S01E03
+            new RegExp(`${parseInt(season)}x${episodeSlug}`, 'i'),      // 1x03
+            new RegExp(`E${episodeSlug}(?!\\d)`, 'i'),                  // E03 (not followed by more digits)
+            new RegExp(`Episode[\\s._-]*${episodeSlug}(?!\\d)`, 'i')   // Episode 03, Episode.03, etc.
+        ];
+        
+        filteredPaths = paths.filter(path => 
+            patterns.some(pattern => pattern.test(path.text))
+        );
+        
+        console.log(`[DahmerMovies] Filtered to ${filteredPaths.length} TV episode links (S${seasonSlug}E${episodeSlug} or variants)`);
     }
 
     if (filteredPaths.length === 0) {
         console.log('[DahmerMovies] No matching content found');
         return [];
     }
-    const pathsToProcess = filteredPaths.slice(0, 5); 
+
+    const pathsToProcess = filteredPaths.slice(0, 5);
     const results = [];
 
     try {
