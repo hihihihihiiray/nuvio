@@ -9,8 +9,8 @@ const DAHMER_MOVIES_API = 'https://a.111477.xyz';
 const TIMEOUT = 22000; // 22 seconds
 
 const BATCH_SIZE = 3;          // links resolved in parallel per batch
-const BATCH_GAP_MS = 1200;      // gap between batches (only paid when a 429 occurred)
-const RETRY_MS = 8000;    // wait on 429 before retrying a single link
+const BATCH_GAP_MS = 1500;      // gap between batches (only paid when a 429 occurred)
+const RETRY_MS = 7500;    // wait on 429 before retrying a single link
 
 // Quality mapping
 const Qualities = {
@@ -339,20 +339,23 @@ async function invokeDahmerMovies(title, year, season = null, episode = null) {
 
     let filteredPaths;
     if (season === null) {
-        // Try 2160p filtering first
+        // Try 2160p first
         filteredPaths = paths.filter(path => /2160p/i.test(path.text));
         
         if (filteredPaths.length > 0) {
             console.log(`[DahmerMovies] Found ${filteredPaths.length} 2160p links, prioritizing those`);
         } else {
-            // No 2160p found — fall back to 1080p only, take first 5 links in directory
+            // No 2160p found — fall back to 1080p only, take first 5 links
             filteredPaths = paths.filter(path => /1080p/i.test(path.text)).slice(0, 5);
             console.log(`[DahmerMovies] No 2160p found, falling back to first ${filteredPaths.length} 1080p links`);
         }
     } else {
         const [seasonSlug, episodeSlug] = getEpisodeSlug(season, episode);
         
-        // Build multiple patterns to match different episode naming formats if found
+        // Build multiple patterns to match different episode naming formats:
+        // - S01E03 (standard)
+        // - 1x03 (alternate)
+        // - E03 or Episode 03 (plain episode number)
         const patterns = [
             new RegExp(`S${seasonSlug}E${episodeSlug}`, 'i'),           // S01E03
             new RegExp(`${parseInt(season)}x${episodeSlug}`, 'i'),      // 1x03
@@ -371,30 +374,22 @@ async function invokeDahmerMovies(title, year, season = null, episode = null) {
         console.log('[DahmerMovies] No matching content found');
         return [];
     }
-   // If 4K/2160p found, take first 5 links in directory with that resolution
+
     const pathsToProcess = filteredPaths.slice(0, 5);
     const results = [];
 
     try {
-        for (let i = 0; i < pathsToProcess.length; i += BATCH_SIZE) {
-            const batch = pathsToProcess.slice(i, i + BATCH_SIZE);
-            console.log(`[DahmerMovies] Processing batch ${Math.floor(i / BATCH_SIZE) + 1} (${batch.length} links)`);
-
-            const batchResults = await Promise.all(
-                batch.map(path => resolvePath(path, encodedUrl))
-            );
-
-            let anyHit429 = false;
-            batchResults.forEach(function ({ result, hit429 }) {
-                if (result) results.push(result);
-                if (hit429) anyHit429 = true;
-            });
-
-            if (anyHit429 && i + BATCH_SIZE < pathsToProcess.length) {
-                console.log(`[DahmerMovies] Batch hit 429 — pausing ${BATCH_GAP_MS}ms before next batch`);
-                await sleep(BATCH_GAP_MS);
-            }
-        }
+        console.log(`[DahmerMovies] Processing all ${pathsToProcess.length} links in parallel`);
+        
+        // Fire all resolvePath calls in parallel
+        const allResults = await Promise.all(
+            pathsToProcess.map(path => resolvePath(path, encodedUrl))
+        );
+        
+        // Collect successful results
+        allResults.forEach(function ({ result, hit429 }) {
+            if (result) results.push(result);
+        });
 
         results.sort((a, b) => getIndexQuality(b.filename) - getIndexQuality(a.filename));
         console.log(`[DahmerMovies] Successfully processed ${results.length} streams`);
