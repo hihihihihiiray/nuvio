@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "scrapers": [
     { 
-      "id": "showbox",
+      "id": "nuvio-showbox",
       "name": "ShowBox",
       "description": "ShowBox streaming with multiple quality options and versions (~4s)",
       "version": "2.0",
@@ -25,7 +25,7 @@
       ]
     },
     {
-      "id": "4khdhub",
+      "id": "nuvio-4khdhub",
       "name": "4KHDHub",
       "description": "Direct links up to 4K (~3s)",
       "version": "1.4",
@@ -45,7 +45,7 @@
       ]
     },
     {
-      "id": "uhdmovies",
+      "id": "nuvio-uhdmovies",
       "name": "UHDMovies",
       "description": "UHDMovies streaming with multiple resolutions (~3.5s)",
       "version": "1.3",
@@ -65,7 +65,7 @@
       ]
     },
     {
-      "id": "dahmermovies",
+      "id": "nuvio-dahmermovies",
       "name": "DahmerMovies",
       "description": "DahmerMovies streaming service. Can be slow to fetch and stream, only use if needed. (~20s)",
       "version": "1.4",
@@ -86,7 +86,7 @@
       ]
     },
     {
-      "id": "hdhub4u",
+      "id": "nuvio-hdhub4u",
       "name": "HDHub4u",
       "description": "Direct links from HDHub4u with high-speed download support (~4s)",
       "version": "1.1",
@@ -108,7 +108,7 @@
       ]
     },
     {
-      "id": "moviesdrive",
+      "id": "nuvio-moviesdrive",
       "name": "MoviesDrive",
       "description": "MoviesDrive - Movies and TV shows with multiple streaming servers (~4s)",
       "version": "2.0",
@@ -131,7 +131,7 @@
       ]
     },
     {
-      "id": "hindmoviez",
+      "id": "nuvio-hindmoviez",
       "name": "HindMoviez",
       "author": "Sanchit",
       "description": "HindMoviez - Hindi & English Movies and Series (~5s)",
@@ -154,7 +154,7 @@
       ]
     },
     {
-      "id": "videasy",
+      "id": "nuvio-videasy",
       "name": "VidEasy",
       "description": "VidEasy streaming with multiple server support (~2.5s)",
       "version": "1.0",
@@ -176,7 +176,7 @@
       ]
     },
     { 
-      "id": "vidfast",
+      "id": "nuvio-vidfast",
       "name": "VidFast",
       "description": "VidFast streaming with multi-server support and automatic quality changing (~6s)",
       "version": "2.0",
@@ -197,7 +197,7 @@
       ]
     },
     {
-      "id": "vidlink",
+      "id": "nuvio-vidlink",
       "name": "VidLink",
       "description": "Vidlink streaming with fast load times and good quality (~3s)",
       "version": "1.0",
@@ -218,7 +218,7 @@
       ]
     },
     {
-      "id": "animekai",
+      "id": "nuvio-animekai",
       "name": "AnimeKai",
       "description": "AnimeKai streaming with fast load times, up to 1080p playback, and multi-server support (~3s)",
       "version": "1.1",
@@ -239,7 +239,7 @@
       ]
     },
     {
-      "id": "animepahe",
+      "id": "nuvio-animepahe",
       "name": "AnimePahe",
       "description": "AnimePahe streaming links with sub and dub support (~4s)",
       "version": "1.0",
