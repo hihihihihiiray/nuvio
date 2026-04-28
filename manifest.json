@@ -48,7 +48,7 @@
     {
       "id": "nuvio-uhdmovies",
       "name": "UHDMovies",
-      "description": "UHDMovies streaming with multiple resolutions (~3.5s)",
+      "description": "UHDMovies streaming with multiple resolutions (~5s)",
       "version": "1.3",
       "author": "D3adlyRocket",
       "supportedTypes": [
@@ -157,7 +157,7 @@
     {
       "id": "nuvio-videasy",
       "name": "VidEasy",
-      "description": "VidEasy streaming with multiple server support (~2.5s)",
+      "description": "VidEasy streaming with multiple server support (~3.5s)",
       "version": "1.0",
       "author": "raymondnoodles",
       "supportedTypes": [
@@ -179,7 +179,7 @@
     { 
       "id": "nuvio-vidfast",
       "name": "VidFast",
-      "description": "VidFast streaming with multi-server support and automatic quality changing (~6s)",
+      "description": "VidFast streaming with multi-server support and automatic quality changing (~7s)",
       "version": "2.0",
       "author": "raymondnoodles",
       "supportedTypes": [
@@ -221,7 +221,7 @@
     {
       "id": "nuvio-animekai",
       "name": "AnimeKai",
-      "description": "AnimeKai streaming with fast load times, up to 1080p playback, and multi-server support (~3s)",
+      "description": "AnimeKai streaming with fast load times, up to 1080p playback, and multi-server support (~5s)",
       "version": "1.1",
       "author": "Nuvio Team",
       "supportedTypes": [
