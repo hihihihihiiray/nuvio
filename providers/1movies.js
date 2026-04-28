@@ -5,8 +5,8 @@ console.log('[1Movies] Initializing 1Movies scraper');
 
 // Constants
 const TMDB_API_KEY = "1c29a5198ee1854bd5eb45dbe8d17d92";
-const BASE_URL = 'https://1movies.bz';
-const AJAX_URL = 'https://1movies.bz/ajax';
+const BASE_URL = 'https://1moviesz.to';
+const AJAX_URL = 'https://1moviesz.to/ajax';
 const ENC_DEC_API = 'https://enc-dec.app/api';
 const TIMEOUT = 20000;
 
@@ -26,7 +26,7 @@ function makeRequest(url, options = {}) {
     const requestOptions = {
         timeout: TIMEOUT,
         headers: {
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36',
             'Accept': 'application/json',
             'Referer': BASE_URL + '/',
             ...options.headers
