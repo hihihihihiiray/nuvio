@@ -1,4 +1,5 @@
-// UHDMovies Scraper for Nuvio Local Scrapers
+// UHDMovies Scraper for Nuvio Local Scrapers - Ported from Kotlin CloudStream Extension
+// Based on: phisher98/cloudstream-extensions-phisher/UHDmoviesProvider
 // React Native compatible version
 
 "use strict";
