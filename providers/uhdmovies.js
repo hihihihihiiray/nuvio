@@ -507,7 +507,7 @@ function extractDriveseedPage(url) {
       });
 
       return Promise.all(promises).then(function () {
-        // Sort by quality (highest first) - matches ShowBox ordering
+        // Sort by quality (highest first)
         var qualityOrder = {
           '2160p': 5,
           '1440p': 4,
