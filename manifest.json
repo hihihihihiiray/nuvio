@@ -200,7 +200,7 @@
     {
       "id": "nuvio-movix",
       "name": "Movix",
-      "description": "Movies and TV series in English & French (dubbed/subtitled)",
+      "description": "Movies and TV series in English & French (dubbed/subtitled) (~5s)",
       "version": "1.0",
       "author": "wooodyhood",
       "supportedTypes": [
@@ -243,7 +243,7 @@
     {
       "id": "nuvio-embed69",
       "name": "Embed69",
-      "description": "Movies & Series in English & Spanish",
+      "description": "Movies & Series in English & Spanish (~5s)",
       "version": "1.0",
       "author": "KennethJYS",
       "supportedTypes": [
@@ -265,7 +265,7 @@
     {
       "id": "nuvio-filmmodu",
       "name": "FilmModu",
-      "description": "Full HD movies with Turkish dubbing and subtitles. Streaming is provided via filmmodu.one",
+      "description": "Full HD movies with Turkish dubbing and subtitles. Streaming is provided via filmmodu.one (~5s)",
       "version": "1.0",
       "author": "keyiflerolsun",
       "supportedTypes": [
@@ -281,7 +281,7 @@
     {
       "id": "nuvio-kisskh",
       "name": "KissKH",
-      "description": "Stream Korean dramas and movies from onlykdrama.top",
+      "description": "Stream Korean dramas and movies from onlykdrama.top (~6s)",
       "version": "1.0",
       "author": "Michat88",
       "supportedTypes": [
