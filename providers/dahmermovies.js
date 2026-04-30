@@ -8,10 +8,6 @@ const TMDB_API_KEY = "1c29a5198ee1854bd5eb45dbe8d17d92";
 const DAHMER_MOVIES_API = 'https://a.111477.xyz';
 const TIMEOUT = 22000; // 22 seconds
 
-const BATCH_SIZE = 3;          // links resolved in parallel per batch
-const BATCH_GAP_MS = 1500;      // gap between batches (only paid when a 429 occurred)
-const RETRY_MS = 8000;    // wait on 429 before retrying a single link
-
 // Quality mapping
 const Qualities = {
     Unknown: 0,
@@ -112,59 +108,6 @@ function decode(input) {
     } catch (e) {
         return input;
     }
-}
-
-function sleep(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-}
-
-// Resolve redirects to get the final direct URL
-// Returns { url, hit429 } so callers know whether to back off
-function resolveFinalUrl(startUrl) {
-    const maxRedirects = 5;
-    const referer = 'https://a.111477.xyz/';
-    const userAgent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36';
-
-    function attemptResolve(url, count, retryCount = 0) {
-        if (count >= maxRedirects) {
-            return Promise.resolve({ url: url.includes('111477.xyz') ? null : url, hit429: false });
-        }
-
-        return fetch(url, {
-            method: 'HEAD',
-            redirect: 'manual',
-            headers: { 'User-Agent': userAgent, 'Referer': referer }
-        }).then(function (response) {
-            if (response.status === 429) {
-                if (retryCount < 3) {
-                    const waitTime = RETRY_MS
-                    console.log(`[DahmerMovies] 429 received, retrying in ${waitTime}ms (attempt ${retryCount + 1})`);
-                    return sleep(waitTime).then(() => attemptResolve(url, count, retryCount + 1));
-                }
-                return { url: null, hit429: true };
-            }
-
-            if (response.status >= 300 && response.status < 400) {
-                const location = response.headers.get('location');
-                if (location) {
-                    const nextUrl = location.startsWith('http')
-                        ? location
-                        : new URL(location, url).href;
-                    return attemptResolve(nextUrl, count + 1);
-                }
-            }
-
-            if (url.includes('111477.xyz')) {
-                return { url: null, hit429: false };
-            }
-
-            return { url, hit429: false };
-        }).catch(function () {
-            return { url: null, hit429: false };
-        });
-    }
-
-    return attemptResolve(startUrl, 0);
 }
 
 // Format file size from bytes to human readable format
@@ -273,27 +216,24 @@ function resolvePath(path, encodedUrl) {
         .replace(/\(/g, '%28')
         .replace(/\)/g, '%29');
 
-    return resolveFinalUrl(fullUrl).then(function ({ url, hit429 }) {
-        if (!url) return { result: null, hit429 };
-        return {
-            result: {
-                name: "DahmerMovies",
-                title: path.text,
-                url,
-                quality: qualityWithCodecs,
-                size: formatFileSize(path.size),
-                type: "direct",
-                headers: {
-                    'User-Agent': 'Mozilla/5.0 (Android) ExoPlayer',
-                    'Referer': DAHMER_MOVIES_API + '/'
-                },
-                provider: "dahmermovies",
-                filename: path.text
+    // Skip redirect resolution - return the a.111477.xyz link directly
+    // Let Nuvio player handle redirects on its own
+    return Promise.resolve({
+        result: {
+            name: "DahmerMovies",
+            title: path.text,
+            url: fullUrl,
+            quality: qualityWithCodecs,
+            size: formatFileSize(path.size),
+            type: "direct",
+            headers: {
+                'User-Agent': 'Mozilla/5.0 (Android) ExoPlayer',
+                'Referer': DAHMER_MOVIES_API + '/'
             },
-            hit429
-        };
-    }).catch(function () {
-        return { result: null, hit429: false };
+            provider: "dahmermovies",
+            filename: path.text
+        },
+        hit429: false
     });
 }
 
