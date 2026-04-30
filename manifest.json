@@ -176,6 +176,28 @@
         "en"
       ]
     },
+    {
+      "id": "nuvio-movix",
+      "name": "Movix",
+      "description": "Movies and TV series in English & French (dubbed/subtitled)",
+      "version": "1.0",
+      "author": "wooodyhood",
+      "supportedTypes": [
+        "movie", 
+        "tv"
+      ],
+      "filename": "providers/movix.js",
+      "enabled": true,
+      "formats": [
+        "mp4", 
+        "m3u8"
+      ],
+      "logo": "https://i.postimg.cc/XYrPQm87/movix.png",
+      "contentLanguage": [
+        "en", 
+        "fr"
+      ]
+    },
     { 
       "id": "nuvio-vidfast",
       "name": "VidFast",
@@ -216,6 +238,68 @@
       "logo": "https://vidlink.pro/favicon.ico",
       "contentLanguage": [
         "en"
+      ]
+    },
+    {
+      "id": "embed69",
+      "name": "Embed69",
+      "description": "Movies & Series in English & Spanish",
+      "version": "1.0",
+      "author": "KennethJYS",
+      "supportedTypes": [
+        "movie", 
+        "tv"
+      ],
+      "filename": "providers/embed69.js",
+      "enabled": true,
+      "formats": [
+        "mp4", 
+        "m3u8"
+      ],
+      "logo": "https://i.postimg.cc/SK9YMsHG/embed69.png",
+      "contentLanguage": [
+        "en", 
+        "es"
+      ]
+    },
+    {
+      "id": "filmmodu",
+      "name": "FilmModu",
+      "description": "Full HD movies with Turkish dubbing and subtitles. Streaming is provided via filmmodu.one",
+      "version": "1.0",
+      "author": "keyiflerolsun",
+      "supportedTypes": [
+        "movie"
+      ],
+      "filename": "providers/filmmodu.js",
+      "enabled": true,
+      "logo": "https://filmmodu.rip/wp-content/uploads/2023/07/logo.png",
+      "contentLanguage": [
+        "tr"
+      ]
+    },
+    {
+      "id": "kisskh",
+      "name": "KissKH",
+      "description": "Stream Korean dramas and movies from onlykdrama.top",
+      "version": "1.0",
+      "author": "Michat88",
+      "supportedTypes": [
+        "movie", 
+        "tv"
+      ],
+      "filename": "providers/kisskh.js",
+      "enabled": true,
+      "formats": [
+        "mp4", 
+        "m3u8"
+      ],
+      "logo": "https://i.postimg.cc/2yLnTzPP/kisskh.jpg",
+      "contentLanguage": [
+        "ko", 
+        "ch", 
+        "ja", 
+        "th"
       ]
     },
     {
