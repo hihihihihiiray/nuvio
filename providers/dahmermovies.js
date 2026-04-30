@@ -8,7 +8,7 @@ const TMDB_API_KEY = "1c29a5198ee1854bd5eb45dbe8d17d92";
 const DAHMER_MOVIES_API = 'https://a.111477.xyz';
 const TIMEOUT = 22000; // 22 seconds
 
-const BATCH_SIZE = 4;          // links resolved in parallel per batch
+const BATCH_SIZE = 3;          // links resolved in parallel per batch
 const BATCH_GAP_MS = 1500;      // gap between batches (only paid when a 429 occurred)
 const RETRY_MS = 8000;    // wait on 429 before retrying a single link
 
@@ -345,8 +345,8 @@ async function invokeDahmerMovies(title, year, season = null, episode = null) {
         if (filteredPaths.length > 0) {
             console.log(`[DahmerMovies] Found ${filteredPaths.length} 2160p links, prioritizing those`);
         } else {
-            // No 2160p found — fall back to 1080p only, take first 7 links
-            filteredPaths = paths.filter(path => /1080p/i.test(path.text)).slice(0, 7);
+            // No 2160p found — fall back to 1080p only, take first 5 links
+            filteredPaths = paths.filter(path => /1080p/i.test(path.text)).slice(0, 5);
             console.log(`[DahmerMovies] No 2160p found, falling back to first ${filteredPaths.length} 1080p links`);
         }
     } else {
@@ -371,8 +371,8 @@ async function invokeDahmerMovies(title, year, season = null, episode = null) {
         console.log('[DahmerMovies] No matching content found');
         return [];
     }
-    // If 2160p found, fetch first 7 links
-    const pathsToProcess = filteredPaths.slice(0, 7);
+    // If 2160p found, fetch first 5 links
+    const pathsToProcess = filteredPaths.slice(0, 5);
     const results = [];
 
     try {
