@@ -27,7 +27,9 @@ A curated collection of the best high-quality scrapers compiled for the Nuvio st
 | [![x6exNRUb](https://ruayamo.s-ul.eu/x6exNRUb)](https://postimg.cc/754Dch6T) VidFast | 🏴󠁧󠁢󠁥󠁮󠁧󠁿 | Shows & Movies | 4K / 1080p / 720p
 | [![0lxldV5e](https://ruayamo.s-ul.eu/0lxldV5e)](https://postimg.cc/p5JKh9ZV) Movix | 🏴󠁧󠁢󠁥󠁮󠁧󠁿 🇫🇷| Shows & Movies | 4K / 1080p / 720p
 | 🎬 VidLink | 🏴󠁧󠁢󠁥󠁮󠁧󠁿 | Shows & Movies | 1080p / 720p
-| [![TAdfgLqZ](https://ruayamo.s-ul.eu/TAdfgLqZ)](https://postimg.cc/0K07M6fk)) Embed69 | 🏴󠁧󠁢󠁥󠁮󠁧󠁿 🇪🇸 |Shows & Movies | 1080p / 720p
+| [![TAdfgLqZ](https://ruayamo.s-ul.eu/TAdfgLqZ)](https://postimg.cc/0K07M6fk) Embed69 | 🏴󠁧󠁢󠁥󠁮󠁧󠁿 🇪🇸 | Shows & Movies | 1080p / 720p
+| [![QamCog9I](https://ruayamo.s-ul.eu/QamCog9I)](https://postimg.cc/5QS8YH3N) FilmModu | 🏴󠁧󠁢󠁥󠁮󠁧󠁿 🇹🇷 | Shows & Movies | 1080p / 720p
+| [![4RPU1nrB](https://ruayamo.s-ul.eu/4RPU1nrB)](https://postimg.cc/tnNFZ15p) KissKH | 🇰🇷 🇨🇳 🇯🇵 🇹🇭 | Asian Dramas & Movies | 1080p / 720p
 | [![animekai.png](https://i.postimg.cc/cLCqcnFV/animekai.png)](https://postimg.cc/9r6Nmr5p) AnimeKai | 🏴󠁧󠁢󠁥󠁮󠁧󠁿 🇯🇵 | Anime (Shows & Movies) | 1080p / 720p
 | [![dfb4smC5](https://ruayamo.s-ul.eu/dfb4smC5)](https://postimg.cc/QBbHSrdv) AnimePahe | 🏴󠁧󠁢󠁥󠁮󠁧󠁿 🇯🇵 | Anime (Shows & Movies) | 1080p / 720p
 
@@ -48,7 +50,11 @@ This repository is a personal collection of public plugins made by other people 
 
 
 ## Credits
-- **Yoruix**
+- **yoruix**
 - **D3adlyRocket**
 - **Phisher98**
 - **Sanchit**
+- **wooodyhood**
+- **KennethJYS**
+- **keyiflerolsun** (From MoOnCrOwN's Repo)
+- **Michat88**
