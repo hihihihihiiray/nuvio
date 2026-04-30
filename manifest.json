@@ -176,6 +176,27 @@
         "en"
       ]
     },
+    { 
+      "id": "nuvio-vidfast",
+      "name": "VidFast",
+      "description": "VidFast streaming with multi-server support and automatic quality changing (~6s)",
+      "version": "2.0",
+      "author": "raymondnoodles",
+      "supportedTypes": [
+        "movie",
+        "tv"
+      ],
+      "filename": "providers/vidfast.js",
+      "enabled": true,
+      "formats": [
+        "mp4",
+        "mkv"
+      ],
+      "logo": "https://www.vidfast.net/favicon.ico",
+      "contentLanguage": [
+        "en"
+      ]
+    },
     {
       "id": "nuvio-movix",
       "name": "Movix",
@@ -196,27 +217,6 @@
       "contentLanguage": [
         "en", 
         "fr"
-      ]
-    },
-    { 
-      "id": "nuvio-vidfast",
-      "name": "VidFast",
-      "description": "VidFast streaming with multi-server support and automatic quality changing (~6s)",
-      "version": "2.0",
-      "author": "raymondnoodles",
-      "supportedTypes": [
-        "movie",
-        "tv"
-      ],
-      "filename": "providers/vidfast.js",
-      "enabled": true,
-      "formats": [
-        "mp4",
-        "mkv"
-      ],
-      "logo": "https://www.vidfast.net/favicon.ico",
-      "contentLanguage": [
-        "en"
       ]
     },
     {
