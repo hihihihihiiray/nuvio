@@ -241,7 +241,7 @@
       ]
     },
     {
-      "id": "embed69",
+      "id": "nuvio-embed69",
       "name": "Embed69",
       "description": "Movies & Series in English & Spanish",
       "version": "1.0",
@@ -263,7 +263,7 @@
       ]
     },
     {
-      "id": "filmmodu",
+      "id": "nuvio-filmmodu",
       "name": "FilmModu",
       "description": "Full HD movies with Turkish dubbing and subtitles. Streaming is provided via filmmodu.one",
       "version": "1.0",
@@ -279,7 +279,7 @@
       ]
     },
     {
-      "id": "kisskh",
+      "id": "nuvio-kisskh",
       "name": "KissKH",
       "description": "Stream Korean dramas and movies from onlykdrama.top",
       "version": "1.0",
