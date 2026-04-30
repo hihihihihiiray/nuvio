@@ -34,7 +34,7 @@ A curated collection of the best high-quality scrapers compiled for the Nuvio st
 | [![dfb4smC5](https://ruayamo.s-ul.eu/dfb4smC5)](https://postimg.cc/QBbHSrdv) AnimePahe | 🏴󠁧󠁢󠁥󠁮󠁧󠁿 🇯🇵 | Anime (Shows & Movies) | 1080p / 720p
 
 
-**Total Number of Plugins**: **12**
+**Total Number of Plugins**: **16**
 
 ## Disclaimer
 **No content is hosted by this repository.**
