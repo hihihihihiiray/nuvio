@@ -76,10 +76,10 @@ function fetchText(_0) {
     try {
       const response = yield fetch(url, {
         headers: __spreadValues({
-          "User-Agent": USER_AGENT
-          "Accept": ACCEPT
-          "Accept-Language": ACCEPT_LANGUAGE
-          "Connection": CONNECTION
+          "User-Agent": USER_AGENT,
+          "Accept": ACCEPT,
+          "Accept-Language": ACCEPT_LANGUAGE,
+          "Connection": CONNECTION,
           "Upgrade-Insecure-Requests": UPGRADE_INSECURE_REQUESTS
           
         }, options.headers)
