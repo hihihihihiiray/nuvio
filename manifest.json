@@ -285,6 +285,51 @@
       ]
     },
     {
+      "id": "movieblast",
+      "name": "MovieBlast",
+      "description": "Direct links via MovieBlast API with multi-language support (~6s)",
+      "version": "1.0",
+      "author": "Nuvio Team",
+      "supportedTypes": [
+        "movie",
+        "tv"
+      ],
+      "filename": "providers/movieblast.js",
+      "enabled": true,
+      "formats": [
+        "mp4",
+        "mkv"
+      ],
+      "logo": "https://raw.githubusercontent.com/phisher98/TVVVV/refs/heads/main/Icons/movieblast.png",
+      "contentLanguage": [
+        "en",
+        "hi",
+        "te"
+      ]
+    },
+    {
+      "id": "FaselHD",
+      "name": "FaselHD",
+      "description": "Arabic Hard Sub movies, TV shows, and anime (~5s)",
+      "version": "16.2",
+      "author": "Nuvio Team",
+      "supportedTypes": [
+        "movie",
+        "tv"
+      ],
+      "filename": "providers/faselhd.js",
+      "enabled": true,
+      "formats": [
+        "m3u8"
+      ],
+      "logo": "https://raw.githubusercontent.com/nvmindl/nuvio-providers/main/Assets/faselhdx.png",
+      "contentLanguage": [
+        "en",
+        "ar",
+        "ja"
+      ]
+    },
+    {
       "id": "nuvio-kisskh",
       "name": "KissKH",
       "description": "Stream Korean dramas and movies from onlykdrama.top (~6s)",
