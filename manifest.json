@@ -285,7 +285,7 @@
       ]
     },
     {
-      "id": "movieblast",
+      "id": "nuvio-movieblast",
       "name": "MovieBlast",
       "description": "Direct links via MovieBlast API with multi-language support (~6s)",
       "version": "1.0",
@@ -308,7 +308,7 @@
       ]
     },
     {
-      "id": "FaselHD",
+      "id": "nuvio-faselhd",
       "name": "FaselHD",
       "description": "Arabic Hard Sub movies, TV shows, and anime (~5s)",
       "version": "16.2",
