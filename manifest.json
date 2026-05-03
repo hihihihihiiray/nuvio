@@ -173,7 +173,13 @@
       ],
       "logo": "https://www.videasy.net/logo.png",
       "contentLanguage": [
-        "en"
+        "en",
+        "de",
+        "it",
+        "fr",
+        "es",
+        "pt"
+        
       ]
     },
     { 
