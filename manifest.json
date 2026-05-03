@@ -33,7 +33,7 @@
       "name": "UHDMovies",
       "description": "UHDMovies streaming with multiple resolutions (~6s)",
       "version": "1.3",
-      "author": "Nuvio Team"
+      "author": "Nuvio Team",
       "supportedTypes": ["movie", "tv"],
       "filename": "providers/uhdmovies.js",
       "enabled": true,
