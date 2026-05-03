@@ -29,12 +29,14 @@ A curated collection of the best high-quality scrapers compiled for the Nuvio st
 | 🎬 VidLink | 🏴󠁧󠁢󠁥󠁮󠁧󠁿 | Shows & Movies | 1080p / 720p
 | [![TAdfgLqZ](https://ruayamo.s-ul.eu/TAdfgLqZ)](https://postimg.cc/0K07M6fk) Embed69 | 🏴󠁧󠁢󠁥󠁮󠁧󠁿 🇪🇸 | Shows & Movies | 1080p / 720p
 | [![QamCog9I](https://ruayamo.s-ul.eu/QamCog9I)](https://postimg.cc/5QS8YH3N) FilmModu | 🏴󠁧󠁢󠁥󠁮󠁧󠁿 🇹🇷 | Shows & Movies | 1080p / 720p
+| [![yCuUJlvP](https://ruayamo.s-ul.eu/yCuUJlvP)](https://postimg.cc/ykh7tp9T) MovieBlast | 🏴󠁧󠁢󠁥󠁮󠁧󠁿 🇮🇳 | Shows & Movies | 1080p / 720p
+| [![FASbMFZz](https://ruayamo.s-ul.eu/FASbMFZz)](https://postimg.cc/sGdR052X) FaselHD | 🏴󠁧󠁢󠁥󠁮󠁧󠁿 🇦🇪 | Shows & Movies | 1080p / 720p
 | [![4RPU1nrB](https://ruayamo.s-ul.eu/4RPU1nrB)](https://postimg.cc/tnNFZ15p) KissKH | 🇰🇷 🇨🇳 🇯🇵 🇹🇭 | Asian Dramas & Movies | 1080p / 720p
 | [![animekai.png](https://i.postimg.cc/cLCqcnFV/animekai.png)](https://postimg.cc/9r6Nmr5p) AnimeKai | 🏴󠁧󠁢󠁥󠁮󠁧󠁿 🇯🇵 | Anime (Shows & Movies) | 1080p / 720p
 | [![dfb4smC5](https://ruayamo.s-ul.eu/dfb4smC5)](https://postimg.cc/QBbHSrdv) AnimePahe | 🏴󠁧󠁢󠁥󠁮󠁧󠁿 🇯🇵 | Anime (Shows & Movies) | 1080p / 720p
 
 
-**Total Number of Plugins**: **16**
+**Total Number of Plugins**: **18**
 
 ## Disclaimer
 **No content is hosted by this repository.**
