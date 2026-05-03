@@ -20,7 +20,13 @@ const SERVERS = {
     'Neon': { url: 'https://api.videasy.net/myflixerzupcloud/sources-with-title', language: 'Original' },
     'Yoru': { url: 'https://api.videasy.net/cdn/sources-with-title', language: 'Original', moviesOnly: true },
     'Sage': { url: 'https://api.videasy.net/1movies/sources-with-title', language: 'Original' },
-    'Breach': { url: 'https://api.videasy.net/m4uhd/sources-with-title', language: 'Original' }
+    'Breach': { url: 'https://api.videasy.net/m4uhd/sources-with-title', language: 'Original' },
+    'Killjoy': { url: 'https://api.videasy.net/meine/sources-with-title?language=german', language: 'German' },
+    'Harbor': { url: 'https://api.videasy.net/meine/sources-with-title?language=italian', language: 'Italian' },
+    'Chamber': { url: 'https://api.videasy.net/meine/sources-with-title?language=french', language: 'French', moviesOnly: true },
+    'Omen': { url: 'https://api.videasy.net/lamovie/sources-with-title', language: 'Spanish' },
+    'Raze': { url: 'https://api.videasy.net/superflix/sources-with-title', language: 'Portuguese' },
+
 };
 
 // Helper function to make HTTP requests
@@ -164,7 +170,7 @@ function fetchFromServer(serverName, serverConfig, mediaInfo, tmdbId, seasonNum,
 
         const streams = nonHDRSources.map(function(source) {
             const quality = extractQuality(source);
-            const streamName = `VidEasy ${serverName} - ${quality}`;
+            const streamName = `VidEasy ${serverName} (${serverConfig.language}) - ${quality}`;
 
             return {
                 name: streamName,
