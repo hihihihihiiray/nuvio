@@ -52,6 +52,8 @@ This repository is a personal collection of public plugins made by other people 
 
 
 ## Credits
+Huge thanks to these people who have created these plugins:
+
 - **yoruix**
 - **D3adlyRocket**
 - **Phisher98**
@@ -60,3 +62,4 @@ This repository is a personal collection of public plugins made by other people 
 - **KennethJYS**
 - **keyiflerolsun** (From MoOnCrOwN's Repo)
 - **Michat88**
+- **Nvmindl**
