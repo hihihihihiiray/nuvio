@@ -241,6 +241,30 @@
       ]
     },
     {
+    "id": "hashhackers",
+    "name": "HashHackers",
+    "description": "High-quality, multilingual direct file links",
+    "version": "1.0",
+    "author": "MultiSource",
+    "supportedTypes": [
+      "movie"
+    ],
+    "filename": "providers/hashhackers.js",
+    "enabled": true,
+    "logo": "",
+    "contentLanguage": [
+      "en",
+      "hi",
+      "ta",
+      "te", 
+      "pa"
+    ],
+    "formats": [
+      "mp4",
+      "mkv"
+     ]
+    },
+    {
       "id": "nuvio-embed69",
       "name": "Embed69",
       "description": "Movies & Series in English & Spanish (~5s)",
