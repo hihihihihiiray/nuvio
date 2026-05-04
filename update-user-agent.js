@@ -71,7 +71,9 @@ files.forEach(filename => {
             // Pattern 7: const USER_AGENT = "Mozilla..."
             /const\s+USER_AGENT\s*=\s*"[^"]*"/g,
             // Pattern 8: var USER_AGENT = "Mozilla..."
-            /var\s+USER_AGENT\s*=\s*"[^"]*"/g
+            /var\s+USER_AGENT\s*=\s*"[^"]*"/g,
+            // Pattern 9: UA = "Mozilla..."
+            /UA\s*=\s*"[^"]*"/g
         ];
         
         const replacements = [
