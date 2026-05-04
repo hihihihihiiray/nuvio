@@ -1,0 +1,33 @@
+name: Update User Agent
+
+on:
+  workflow_dispatch:
+    inputs:
+      user_agent:
+        description: "New User-Agent string"
+        required: true
+        default: "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Run script
+        run: node update-user-agent.js "${{ github.event.inputs.user_agent }}"
+
+      - name: Commit changes
+        run: |
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+          git add .
+          git commit -m "Update User-Agent" || echo "No changes"
+          git push
