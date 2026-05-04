@@ -604,7 +604,7 @@ function getStreams(tmdbId, type, season, episode) {
               
               // Stream name: 4KHDHub - {source} {quality}
               const streamName = "4KHDHub - " + link.source + (quality !== "Unknown" ? " " + quality : "");
-              const streamTitle = `${baseTitle}${quality !== "Unknown" ? ` ${quality}` : ""}`;
+              const streamTitle = link.meta.title
               
               return {
                 name: streamName,
