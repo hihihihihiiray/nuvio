@@ -14,7 +14,7 @@ const DOMAIN_CACHE_TTL = 4 * 60 * 60 * 1000; // 4 hours
 let domainCacheTimestamp = 0;
 
 const HEADERS = {
-    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36"
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36"
 };
 
 // =================================================================================
@@ -177,7 +177,7 @@ function fetchAndUpdateDomain() {
     return fetch(DOMAINS_URL, {
         method: 'GET',
         headers: {
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36'
         }
     }).then(function (response) {
         if (response.ok) {
@@ -963,7 +963,7 @@ function getDownloadLinks(mediaUrl, season, episode) {
                 const extractMdrive = (url) => {
                     return fetch(url, {
                         headers: {
-                            'User-Agent': 'Mozilla/5.0'
+                            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36'
                         }
                     })
                         .then(res => res.text())
@@ -1153,7 +1153,7 @@ function getTMDBDetails(tmdbId, mediaType) {
         method: 'GET',
         headers: {
             'Accept': 'application/json',
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36'
         }
     }).then(function (response) {
         console.error('[TMDB] HTTP status:', response.status);

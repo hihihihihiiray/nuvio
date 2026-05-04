@@ -66,7 +66,7 @@ var BASE_URL = "https://app.cloud-mb.xyz";
 var TOKEN = "jdvhhjv255vghhghdhvfch2565656jhdcghfdf";
 var APP_ID = "com.movieblast";
 var HEADERS = {
-  "user-agent": "okhttp/5.0.0-alpha.6",
+  "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36",
   "x-request-x": APP_ID
 };
 var SEARCH_HEADERS = __spreadProps(__spreadValues({}, HEADERS), {
@@ -122,7 +122,7 @@ function getTMDBDetails(tmdbId, mediaType) {
     const url = `${TMDB_BASE_URL}/${endpoint}/${tmdbId}?api_key=${TMDB_API_KEY}`;
     const response = yield fetch(url, {
       method: "GET",
-      headers: { "Accept": "application/json", "User-Agent": "Mozilla/5.0" }
+      headers: { "Accept": "application/json", "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36" }
     });
     if (!response.ok)
       throw new Error(`TMDB API error: ${response.status}`);
@@ -233,7 +233,7 @@ function getStreams(tmdbId, mediaType = "movie", season = null, episode = null) 
           url: signedUrl,
           quality: matchQuality(vid.server),
           headers: {
-            "User-Agent": "MovieBlast",
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36",
             "Referer": "MovieBlast",
             "x-request-x": "com.movieblast"
           },
